@@ -66,10 +66,6 @@
             visibility: visible;
             opacity: 1;
         }
-        .tooltip.show .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
         .nav-menu {
             transform: translateX(-100%);
             transition: transform 0.3s ease-in-out;
@@ -101,6 +97,24 @@
             top: 1rem;
             left: 1rem;
             z-index: 60;
+        }
+        @media (max-width: 640px) {
+            .burger-container button {
+                padding: 0.75rem;
+            }
+        }
+        .contract-address {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 280px;
+            font-family: monospace;
+        }
+        @media (max-width: 640px) {
+            .contract-address {
+                max-width: 200px;
+                font-size: 0.875rem;
+            }
         }
     </style>
 </head>
@@ -140,10 +154,7 @@
                 <p class="text-lg text-black mb-8 max-w-md mx-auto">Get your bandana, Join the cult and Become the cult</p>
                 <div class="flex space-x-4 items-center">
                     <a href="#create-profile" id="createProfileLink" class="bg-yellow-500 text-white py-2 px-6 rounded-lg hover:bg-yellow-600 transition duration-300">Create Your Bandana Profile</a>
-                    <div class="tooltip">
-                        <button id="copyCa" onclick="copyContractAddress()" class="bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-600 hover:scale-105 transition duration-300">J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh</button>
-                        <span class="tooltip-text">Copied!</span>
-                    </div>
+                    <div class="contract-address bg-yellow-500 text-white py-2 px-4 rounded-lg">J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh</div>
                 </div>
             </div>
         </div>
@@ -234,6 +245,7 @@
                             <option value="bold">Bold</option>
                             <option value="text-3d">3D</option>
                         </select>
+                        <input type="color" id="textColor" value="#000000" class="w-full h-10 p-1 border rounded mb-2" title="Select text color">
                         <button id="addText" class="w-full bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 mt-2">Add Text</button>
                     </div>
                     <div class="space-y-2">
@@ -363,18 +375,6 @@
     </footer>
 
     <script>
-        // Copy contract address function
-        function copyContractAddress() {
-            const contractAddress = 'J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh';
-            navigator.clipboard.writeText(contractAddress).then(() => {
-                const tooltip = document.getElementById('copyCa').parentElement;
-                tooltip.classList.add('show');
-                setTimeout(() => tooltip.classList.remove('show'), 1500);
-            }).catch(err => {
-                console.error('Failed to copy contract address:', err);
-            });
-        }
-
         // Toggle navigation menu
         const burgerMenu = document.getElementById('burgerMenu');
         const navMenu = document.getElementById('navMenu');
@@ -383,7 +383,7 @@
         const createProfileLink = document.getElementById('createProfileLink');
 
         burgerMenu.addEventListener('click', () => {
-            navMenu.classList.add('open');
+            navMenu.classList.toggle('open');
         });
 
         closeMenu.addEventListener('click', () => {
@@ -509,6 +509,7 @@
             const text = document.getElementById('customText').value;
             const font = document.getElementById('fontSelect').value;
             const style = document.getElementById('textStyle').value;
+            const color = document.getElementById('textColor').value;
             if (text) {
                 const textObj = new fabric.Text(text, {
                     left: 150,
@@ -516,6 +517,7 @@
                     fontSize: 24,
                     fontFamily: font,
                     fontWeight: style === 'bold' ? 'bold' : 'normal',
+                    fill: color,
                     selectable: true,
                     evented: true,
                     hasControls: true
@@ -572,7 +574,6 @@
 
         document.getElementById('download').addEventListener('click', function() {
             try {
-                // Add watermark
                 const watermark = new fabric.Text('Bandana_sol', {
                     left: 450,
                     top: 550,
@@ -585,14 +586,12 @@
                 canvas.add(watermark);
                 canvas.renderAll();
 
-                // Generate image
                 const dataURL = canvas.toDataURL({
                     format: 'png',
                     quality: 1,
-                    multiplier: 2 // Increase resolution for better quality
+                    multiplier: 2
                 });
 
-                // Create download link
                 const link = document.createElement('a');
                 link.href = dataURL;
                 link.download = 'bandana_profile.png';
@@ -600,7 +599,6 @@
                 link.click();
                 document.body.removeChild(link);
 
-                // Remove watermark after download
                 canvas.remove(watermark);
                 canvas.renderAll();
             } catch (err) {
