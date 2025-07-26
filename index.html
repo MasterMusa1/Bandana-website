@@ -96,21 +96,36 @@
             border-radius: 0.5rem;
             overflow: hidden;
         }
-        .burger-container {
+        .header-container {
             position: sticky;
             top: 0;
-            left: 0;
             z-index: 60;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             padding: 1rem;
+            width: 100%;
         }
+        .burger-container,
         .buy-bandana-container {
-            position: sticky;
-            top: 0;
-            right: 0;
-            z-index: 60;
-            padding: 1rem;
-            float: right;
             display: inline-block;
+        }
+        .burger-button,
+        .buy-bandana-button {
+            background-color: #f59e0b;
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .burger-button:hover,
+        .buy-bandana-button:hover {
+            background-color: #d97706;
+            transform: scale(1.05);
         }
         .contract-address {
             white-space: nowrap;
@@ -135,10 +150,7 @@
             .chart-container {
                 height: 400px;
             }
-            .burger-container {
-                padding: 0.75rem;
-            }
-            .buy-bandana-container {
+            .header-container {
                 padding: 0.75rem;
             }
             .contract-address {
@@ -154,6 +166,11 @@
                 height: auto !important;
                 max-width: 400px;
                 max-height: 400px;
+            }
+            .burger-button,
+            .buy-bandana-button {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.75rem;
             }
         }
         @media (min-width: 641px) and (max-width: 1024px) {
@@ -172,19 +189,20 @@
         <h2 class="text-2xl sm:text-3xl font-bold text-yellow-500 mb-6">Are you ready to join the Bandana Cult?</h2>
         <button id="joinButton" class="bg-yellow-500 text-white py-2 px-6 rounded-lg hover:bg-yellow-600 transition duration-300 text-sm sm:text-base">Yes</button>
     </div>
-    <!-- Sticky Burger Menu -->
-    <div class="burger-container">
-        <button id="burgerMenu" class="text-white text-xl sm:text-2xl bg-yellow-500 p-2 sm:p-3 rounded-lg hover:bg-yellow-600 transition duration-300">
-            <i class="fas fa-bars"></i>
-        </button>
-    </div>
-    <!-- Sticky Buy Bandana Button -->
-    <div class="buy-bandana-container tooltip">
-        <a href="https://pump.fun/coin/J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh" target="_blank" rel="noopener noreferrer" class="bg-yellow-500 text-white py-2 px-3 sm:px-4 rounded-lg hover:bg-yellow-600 hover:scale-105 transition duration-300 flex items-center space-x-1 text-sm sm:text-base">
-            <span>Buy Bandana</span>
-            <span>💸</span>
-        </a>
-        <span class="tooltip-text">Buy BANDANA on Pump.fun</span>
+    <!-- Header with Sticky Buttons -->
+    <div class="header-container">
+        <div class="burger-container">
+            <button id="burgerMenu" class="burger-button">
+                <i class="fas fa-bars text-lg"></i>
+            </button>
+        </div>
+        <div class="buy-bandana-container tooltip">
+            <a href="https://pump.fun/coin/J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh" target="_blank" rel="noopener noreferrer" class="buy-bandana-button">
+                <span>Buy Bandana</span>
+                <span class="ml-1">💸</span>
+            </a>
+            <span class="tooltip-text">Buy BANDANA on Pump.fun</span>
+        </div>
     </div>
     <!-- Hero Section -->
     <section id="home" class="ray-bg py-10 sm:py-16 md:py-20 min-h-[100vh] flex items-center">
