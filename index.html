@@ -40,6 +40,7 @@
         }
         .tooltip {
             position: relative;
+            display: inline-block;
         }
         .tooltip .tooltip-text {
             visibility: hidden;
@@ -94,10 +95,19 @@
             overflow: hidden;
         }
         .burger-container {
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
+            position: sticky;
+            top: 0;
+            left: 0;
             z-index: 60;
+            padding: 1rem;
+        }
+        .buy-bandana-container {
+            position: sticky;
+            top: 0;
+            right: 0;
+            z-index: 60;
+            padding: 1rem;
+            float: right;
         }
         .contract-address {
             white-space: nowrap;
@@ -106,11 +116,26 @@
             max-width: 280px;
             font-family: monospace;
         }
+        #welcomePopup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 70;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
         @media (max-width: 640px) {
             .chart-container {
                 height: 400px;
             }
-            .burger-container button {
+            .burger-container {
+                padding: 0.75rem;
+            }
+            .buy-bandana-container {
                 padding: 0.75rem;
             }
             .contract-address {
@@ -118,8 +143,8 @@
                 font-size: 0.875rem;
             }
             .marquee-content {
-                font-size: 0.875rem; /* Smaller text on mobile */
-                animation-duration: 12s; /* Faster animation on mobile */
+                font-size: 0.875rem;
+                animation-duration: 12s;
             }
             .canvas-container canvas {
                 width: 100% !important;
@@ -139,21 +164,28 @@
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
+    <!-- Welcome Pop-up -->
+    <div id="welcomePopup" class="flex flex-col items-center justify-center text-center">
+        <h2 class="text-2xl sm:text-3xl font-bold text-yellow-500 mb-6">Are you ready to join the Bandana Cult?</h2>
+        <button id="joinButton" class="bg-yellow-500 text-white py-2 px-6 rounded-lg hover:bg-yellow-600 transition duration-300 text-sm sm:text-base">Yes</button>
+    </div>
+    <!-- Sticky Burger Menu -->
+    <div class="burger-container">
+        <button id="burgerMenu" class="text-white text-xl sm:text-2xl bg-yellow-500 p-2 sm:p-3 rounded-lg hover:bg-yellow-600 transition duration-300">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+    <!-- Sticky Buy Bandana Button -->
+    <div class="buy-bandana-container tooltip">
+        <a href="https://pump.fun/coin/J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh" target="_blank" rel="noopener noreferrer" class="bg-yellow-500 text-white py-2 px-3 sm:px-4 rounded-lg hover:bg-yellow-600 hover:scale-105 transition duration-300 flex items-center space-x-1 text-sm sm:text-base">
+            <span>Buy Bandana</span>
+            <span>💸</span>
+        </a>
+        <span class="tooltip-text">Buy BANDANA on Pump.fun</span>
+    </div>
     <!-- Hero Section -->
     <section id="home" class="ray-bg py-10 sm:py-16 md:py-20 relative min-h-[80vh] flex items-center">
         <div class="container mx-auto px-4 sm:px-6 md:px-8 max-w-7xl">
-            <div class="burger-container">
-                <button id="burgerMenu" class="text-white text-xl sm:text-2xl bg-yellow-500 p-2 sm:p-3 rounded-lg hover:bg-yellow-600 transition duration-300">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-            <div class="absolute top-4 right-4 sm:right-6 tooltip">
-                <a href="https://pump.fun/coin/J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh" target="_blank" rel="noopener noreferrer" class="bg-yellow-500 text-white py-2 px-3 sm:px-4 rounded-lg hover:bg-yellow-600 hover:scale-105 transition duration-300 flex items-center space-x-1 text-sm sm:text-base">
-                    <span>Buy Bandana</span>
-                    <span>💸</span>
-                </a>
-                <span class="tooltip-text">Buy BANDANA on Pump.fun</span>
-            </div>
             <nav id="navMenu" class="nav-menu fixed top-0 left-0 h-full w-56 sm:w-64 bg-yellow-500 text-white flex flex-col shadow-lg z-50 overflow-y-auto">
                 <button id="closeMenu" class="text-xl sm:text-2xl p-3 sm:p-4 self-end hover:text-gray-200">
                     <i class="fas fa-times"></i>
@@ -395,6 +427,11 @@
     </footer>
 
     <script>
+        // Welcome Pop-up
+        document.getElementById('joinButton').addEventListener('click', () => {
+            document.getElementById('welcomePopup').style.display = 'none';
+        });
+
         // Toggle navigation menu
         const burgerMenu = document.getElementById('burgerMenu');
         const navMenu = document.getElementById('navMenu');
@@ -431,8 +468,12 @@
         });
 
         // Initialize Fabric.js canvas
+        let canvas;
         function initializeCanvas() {
-            const canvas = new fabric.Canvas('canvas', {
+            if (canvas) {
+                canvas.dispose();
+            }
+            canvas = new fabric.Canvas('canvas', {
                 width: window.innerWidth <= 640 ? window.innerWidth - 32 : 600,
                 height: window.innerWidth <= 640 ? (window.innerWidth - 32) : 600,
                 backgroundColor: '#f0f0f0',
@@ -459,6 +500,8 @@
             }
 
             document.getElementById('baseImageUpload').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     const imgObj = new Image();
@@ -477,13 +520,20 @@
                             lockScalingX: true,
                             lockScalingY: true
                         });
-                        canvas.clear();
+                        canvas.getObjects().forEach(obj => {
+                            if (obj.selectable) canvas.remove(obj);
+                        });
                         canvas.add(image);
                         canvas.sendToBack(image);
+                        canvas.renderAll();
                         saveState();
                     };
+                    imgObj.onerror = function() {
+                        console.error('Failed to load base image');
+                        alert('Failed to load the base image. Please try another file.');
+                    };
                 };
-                if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+                reader.readAsDataURL(file);
             });
 
             document.getElementById('bandanaSelect').addEventListener('change', function(e) {
@@ -497,12 +547,14 @@
                             scaleY: 0.5,
                             selectable: true,
                             evented: true,
-                            hasControls: true
+                            hasControls: true,
+                            crossOrigin: 'anonymous'
                         });
                         canvas.add(img);
                         canvas.bringToFront(img);
+                        canvas.renderAll();
                         saveState();
-                    });
+                    }, { crossOrigin: 'anonymous' });
                 }
             });
 
@@ -517,12 +569,14 @@
                             scaleY: 0.3,
                             selectable: true,
                             evented: true,
-                            hasControls: true
+                            hasControls: true,
+                            crossOrigin: 'anonymous'
                         });
                         canvas.add(img);
                         canvas.bringToFront(img);
+                        canvas.renderAll();
                         saveState();
-                    });
+                    }, { crossOrigin: 'anonymous' });
                 }
             });
 
@@ -550,6 +604,7 @@
                     }
                     canvas.add(textObj);
                     canvas.bringToFront(textObj);
+                    canvas.renderAll();
                     saveState();
                 }
             });
@@ -557,7 +612,9 @@
             document.getElementById('undo').addEventListener('click', function() {
                 if (history.length > 1) {
                     redoStack.push(history.pop());
-                    canvas.loadFromJSON(history[history.length - 1], canvas.renderAll.bind(canvas));
+                    canvas.loadFromJSON(history[history.length - 1], () => {
+                        canvas.renderAll();
+                    });
                 }
             });
 
@@ -565,7 +622,9 @@
                 if (redoStack.length > 0) {
                     const state = redoStack.pop();
                     history.push(state);
-                    canvas.loadFromJSON(state, canvas.renderAll.bind(canvas));
+                    canvas.loadFromJSON(state, () => {
+                        canvas.renderAll();
+                    });
                 }
             });
 
@@ -589,12 +648,14 @@
                 const activeObject = canvas.getActiveObject();
                 if (activeObject) {
                     canvas.remove(activeObject);
+                    canvas.renderAll();
                     saveState();
                 }
             });
 
             document.getElementById('download').addEventListener('click', function() {
                 try {
+                    canvas.renderAll();
                     const watermark = new fabric.Text('Bandana_sol', {
                         left: canvas.width * 0.75,
                         top: canvas.height * 0.917,
@@ -607,23 +668,30 @@
                     canvas.add(watermark);
                     canvas.renderAll();
 
-                    const dataURL = canvas.toDataURL({
-                        format: 'png',
-                        quality: 1,
-                        multiplier: 2
-                    });
+                    setTimeout(() => {
+                        try {
+                            const dataURL = canvas.toDataURL({
+                                format: 'png',
+                                quality: 1,
+                                multiplier: 2
+                            });
 
-                    const link = document.createElement('a');
-                    link.href = dataURL;
-                    link.download = 'bandana_profile.png';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                            const link = document.createElement('a');
+                            link.href = dataURL;
+                            link.download = 'bandana_profile.png';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
 
-                    canvas.remove(watermark);
-                    canvas.renderAll();
+                            canvas.remove(watermark);
+                            canvas.renderAll();
+                        } catch (err) {
+                            console.error('Error generating data URL:', err);
+                            alert('Failed to download the image. Please ensure all images are loaded correctly and try again.');
+                        }
+                    }, 100);
                 } catch (err) {
-                    console.error('Error downloading image:', err);
+                    console.error('Error in download process:', err);
                     alert('Failed to download the image. Please try again.');
                 }
             });
@@ -631,14 +699,12 @@
             canvas.on('object:modified', saveState);
         }
 
-        // Initialize canvas on load
         initializeCanvas();
 
-        // Resize canvas on window resize
         window.addEventListener('resize', () => {
-            const canvas = document.getElementById('canvas');
-            canvas.width = window.innerWidth <= 640 ? window.innerWidth - 32 : 600;
-            canvas.height = window.innerWidth <= 640 ? (window.innerWidth - 32) : 600;
+            const canvasElement = document.getElementById('canvas');
+            canvasElement.width = window.innerWidth <= 640 ? window.innerWidth - 32 : 600;
+            canvasElement.height = window.innerWidth <= 640 ? (window.innerWidth - 32) : 600;
             initializeCanvas();
         });
     </script>
