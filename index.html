@@ -536,74 +536,105 @@
         return overlay;
       }
 
-      function makeDraggable(element, isText) {
-        let isDragging = false;
-        let startX, startY;
+      // ...existing code...
 
-        element.addEventListener('mousedown', (e) => {
-          if (!isText && e.target.classList.contains('handle')) return;
-          isDragging = true;
-          startX = e.clientX - element.getBoundingClientRect().left;
-          startY = e.clientY - element.getBoundingClientRect().top;
-          e.preventDefault();
-        });
+function makeDraggable(element, isText) {
+  let isDragging = false;
+  let startX, startY, origX, origY;
 
-        document.addEventListener('mousemove', (e) => {
-          if (isDragging) {
-            let newLeft = e.clientX - startX - editorContainer.getBoundingClientRect().left;
-            let newTop = e.clientY - startY - editorContainer.getBoundingClientRect().top;
-            // Constrain within editor bounds
-            newLeft = Math.max(0, Math.min(newLeft, editorContainer.offsetWidth - element.offsetWidth));
-            newTop = Math.max(0, Math.min(newTop, editorContainer.offsetHeight - element.offsetHeight));
-            element.style.left = `${newLeft}px`;
-            element.style.top = `${newTop}px`;
-          }
-        });
+  function pointerDown(e) {
+    if (!isText && e.target.classList.contains('handle')) return;
+    isDragging = true;
+    const point = e.touches ? e.touches[0] : e;
+    startX = point.clientX;
+    startY = point.clientY;
+    origX = parseInt(element.style.left, 10) || 0;
+    origY = parseInt(element.style.top, 10) || 0;
+    e.preventDefault();
+  }
 
-        document.addEventListener('mouseup', () => {
-          isDragging = false;
-        });
+  function pointerMove(e) {
+    if (!isDragging) return;
+    const point = e.touches ? e.touches[0] : e;
+    let dx = point.clientX - startX;
+    let dy = point.clientY - startY;
+    let newLeft = origX + dx;
+    let newTop = origY + dy;
+    // Constrain within editor bounds
+    newLeft = Math.max(0, Math.min(newLeft, editorContainer.offsetWidth - element.offsetWidth));
+    newTop = Math.max(0, Math.min(newTop, editorContainer.offsetHeight - element.offsetHeight));
+    element.style.left = `${newLeft}px`;
+    element.style.top = `${newTop}px`;
+  }
+
+  function pointerUp() {
+    isDragging = false;
+  }
+
+  element.addEventListener('mousedown', pointerDown);
+  element.addEventListener('touchstart', pointerDown, { passive: false });
+  document.addEventListener('mousemove', pointerMove);
+  document.addEventListener('touchmove', pointerMove, { passive: false });
+  document.addEventListener('mouseup', pointerUp);
+  document.addEventListener('touchend', pointerUp);
+}
+
+function makeResizable(element) {
+  const handles = element.querySelectorAll('.handle');
+  handles.forEach(handle => {
+    let isResizing = false;
+    let dir, startX, startY, startWidth, startHeight, startLeft, startTop;
+
+    function pointerDown(e) {
+      e.stopPropagation();
+      dir = handle.classList[1];
+      const point = e.touches ? e.touches[0] : e;
+      startX = point.clientX;
+      startY = point.clientY;
+      startWidth = parseInt(element.style.width, 10);
+      startHeight = parseInt(element.style.height, 10);
+      startLeft = parseInt(element.style.left, 10);
+      startTop = parseInt(element.style.top, 10);
+      isResizing = true;
+      e.preventDefault();
+    }
+
+    function pointerMove(e) {
+      if (!isResizing) return;
+      const point = e.touches ? e.touches[0] : e;
+      let dx = point.clientX - startX;
+      let dy = point.clientY - startY;
+      let minSize = window.innerWidth < 600 ? 40 : 20;
+
+      if (dir.includes('e')) {
+        element.style.width = `${Math.max(minSize, startWidth + dx)}px`;
+      } else if (dir.includes('w')) {
+        element.style.width = `${Math.max(minSize, startWidth - dx)}px`;
+        element.style.left = `${startLeft + dx}px`;
       }
 
-      function makeResizable(element) {
-        const handles = element.querySelectorAll('.handle');
-        handles.forEach(handle => {
-          handle.addEventListener('mousedown', (e) => {
-            e.stopPropagation();
-            let dir = handle.classList[1];
-            let startX = e.clientX;
-            let startY = e.clientY;
-            let startWidth = parseInt(element.style.width, 10);
-            let startHeight = parseInt(element.style.height, 10);
-            let startLeft = parseInt(element.style.left, 10);
-            let startTop = parseInt(element.style.top, 10);
-
-            function onMouseMove(e) {
-              let dx = e.clientX - startX;
-              let dy = e.clientY - startY;
-
-              if (dir.includes('e')) {
-                element.style.width = `${Math.max(50, startWidth + dx)}px`;
-              } else if (dir.includes('w')) {
-                element.style.width = `${Math.max(50, startWidth - dx)}px`;
-                element.style.left = `${startLeft + dx}px`;
-              }
-
-              if (dir.includes('s')) {
-                element.style.height = `${Math.max(50, startHeight + dy)}px`;
-              } else if (dir.includes('n')) {
-                element.style.height = `${Math.max(50, startHeight - dy)}px`;
-                element.style.top = `${startTop + dy}px`;
-              }
-            }
-
-            document.addEventListener('mousemove', onMouseMove);
-            document.addEventListener('mouseup', () => {
-              document.removeEventListener('mousemove', onMouseMove);
-            }, { once: true });
-          });
-        });
+      if (dir.includes('s')) {
+        element.style.height = `${Math.max(minSize, startHeight + dy)}px`;
+      } else if (dir.includes('n')) {
+        element.style.height = `${Math.max(minSize, startHeight - dy)}px`;
+        element.style.top = `${startTop + dy}px`;
       }
+    }
+
+    function pointerUp() {
+      isResizing = false;
+    }
+
+    handle.addEventListener('mousedown', pointerDown);
+    handle.addEventListener('touchstart', pointerDown, { passive: false });
+    document.addEventListener('mousemove', pointerMove);
+    document.addEventListener('touchmove', pointerMove, { passive: false });
+    document.addEventListener('mouseup', pointerUp);
+    document.addEventListener('touchend', pointerUp);
+  });
+}
+
+// ...existing code...
 
       addBandanaBtn.addEventListener('click', () => {
         const src = bandanaSelect.value;
