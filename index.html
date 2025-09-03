@@ -246,6 +246,23 @@
     #token-info .step-item:nth-child(5) { color: #81c784; }
     #token-info .step-item:nth-child(6) { color: #ba68c8; }
     #token-info .step-item:nth-child(7) { color: #e57373; }
+
+    @media (max-width: 600px) {
+  .section {
+    padding: 80px 10px 20px 10px;
+    font-size: 1rem;
+  }
+  .section h2 {
+    font-size: 1.3rem;
+    margin-top: 0;
+    margin-bottom: 30px;
+    position: static;
+    transform: none;
+    width: 100%;
+    left: 0;
+    top: 0;
+  }
+}
   </style>
 </head>
 <body>
@@ -282,7 +299,7 @@
   <div id="home" class="section"><h2>Welcome to Bandana</h2><p>Express your identity. Customize your profile. Join the movement.</p></div>
 
   <div id="about" class="section">
-    <h2>About Bandana</h2>
+    <h2>🧮❔About Bandana</h2>
     <p>🌟 <strong>Welcome to the $Bandana Cult</strong>: Dive into a world where bold style fuses with the lightning-fast power of Solana. Customize your bandana to reflect your unique identity and join a vibrant community of rebels and innovators.</p>
     <p>🚀 <strong>Our Mission</strong>: To empower individuals to express their creed through customizable digital assets, fostering a movement of self-expression on the blockchain. Whether you're a crypto enthusiast or a style icon, $BANDANA lets you stand out in the digital realm.</p>
     <p>💎 <strong>Why Bandana?</strong>: Inspired by the timeless symbol of rebellion, unity, and adventure, $BANDANA is more than a memecoin—it's a statement of identity. With zero transaction taxes, strategic liquidity burns, and full dedication of creator funds to marketing, we're engineered for explosive growth, community rewards, and long-term sustainability.</p>
@@ -290,7 +307,7 @@
   </div>
 
   <div id="token-info" class="section">
-    <h2>Contract and Token Info</h2>
+    <h2>📑📊Contract and Token Info</h2>
     <div class="contract-address">
       <strong>Contract Address:</strong> <span id="contract-addr">J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh</span>
       <button onclick="copyContract()">Copy</button>
@@ -319,14 +336,14 @@
   <div id="buy" class="section">
     <h2>🛒 How to Buy</h2>
     <ol>
-      <li class="step-item">🦊 <strong>Create a Wallet:</strong> Download Phantom wallet from <a href="https://phantom.app" target="_blank">phantom.app</a><br>Phantom is a secure, user-friendly wallet designed for the Solana blockchain. After downloading, follow the setup instructions to create your wallet, securely store your seed phrase, and get ready to hold $BANDANA.</li>
+      <li class="step-item">👻 <strong>Create a Wallet:</strong> Download Phantom wallet from <a href="https://phantom.app" target="_blank">phantom.app</a><br>Phantom is a secure, user-friendly wallet designed for the Solana blockchain. After downloading, follow the setup instructions to create your wallet, securely store your seed phrase, and get ready to hold $BANDANA.</li>
       <li class="step-item">💸 <strong>Buy SOL:</strong> Get your hands on some SOL from your favorite exchange.<br>Purchase Solana (SOL) on centralized exchanges like Binance, Coinbase, or Kraken. Once bought, transfer the SOL to your Phantom wallet address for seamless decentralized trading.</li>
       <li class="step-item">🔁 <strong>Swap:</strong> Use Raydium or Jupiter to trade your SOL for Bandana.<br>Connect your Phantom wallet to a Solana DEX like Raydium (raydium.io) or Jupiter (jup.ag). Paste the $BANDANA contract address (J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh), select the amount of SOL to swap, and confirm the transaction to join the cult.</li>
     </ol>
   </div>
 
   <div id="why" class="section">
-    <h2>Why Buy</h2>
+    <h2>❓Why Buy</h2>
     <div class="step-item">🎨 <strong>Custom profiles:</strong> Unleash your inner rebel by crafting a one-of-a-kind bandana avatar that showcases your unique style and creed in the digital world.</div>
     <div class="step-item">👥 <strong>Community perks:</strong> Dive into an exclusive cult of bandana bearers, enjoying airdrops, VIP events, and collaborative adventures that make you part of something bigger.</div>
     <div class="step-item">🗺️ <strong>Future roadmap:</strong> Buckle up for thrilling updates, including NFT drops, metaverse integrations, and utility expansions that will evolve $BANDANA into a powerhouse of innovation.</div>
@@ -352,15 +369,15 @@
   </div>
 
   <div id="create" class="section">
-    <h2>Create Your Bandana Profile</h2>
+    <h2>👨‍🏫Create Your Bandana Profile</h2>
     <div class="editor">
-      <p>Upload your base image (e.g., your photo):</p>
+      <p>➕Upload your base image (e.g., your photo):</p>
       <input type="file" id="base-upload" accept="image/*">
       <div id="editor-container" style="position: relative; width: 600px; height: 600px; border: 1px solid white; margin: 20px auto; overflow: hidden;">
         <img id="base-image" src="" style="width: 100%; height: 100%; object-fit: contain; display: none;">
       </div>
       <div>
-        <h3>Add Bandana Overlay</h3>
+        <h3>➕Add Bandana Overlay</h3>
         <select id="bandana-select">
           <option value="">Select Bandana</option>
           <option value="https://i.imgur.com/JjbEt47.png">Paisley design</option>
@@ -375,7 +392,7 @@
         <button id="add-bandana">Add</button>
       </div>
       <div>
-        <h3>Add Logo Overlay</h3>
+        <h3>➕Add Logo Overlay</h3>
         <select id="logo-select">
           <option value="">Select Logo</option>
           <option value="https://i.imgur.com/WBqPaQB.png">SOL</option>
@@ -386,7 +403,7 @@
         <button id="add-logo">Add</button>
       </div>
       <div>
-        <h3>Add Text</h3>
+        <h3>➕Add Text</h3>
         <input type="text" id="text-content" placeholder="Enter text">
         <select id="text-font">
           <option value="Orbitron">Orbitron</option>
@@ -400,8 +417,8 @@
         <input type="color" id="text-color" value="#ffffff">
         <button id="add-text">Add</button>
       </div>
-      <button id="delete-selected">Delete Selected</button>
-      <button id="save-profile">Save Profile Image</button>
+      <button id="delete-selected">❌Delete Selected</button>
+      <button id="save-profile">✅Save Profile Image</button>
     </div>
   </div>
 
