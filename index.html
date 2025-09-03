@@ -1,744 +1,685 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bandana Cult</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-        .ray-bg {
-            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.3) 0%, #ffffff 70%);
-            backdrop-filter: blur(5px);
-            width: 100vw;
-            position: relative;
-        }
-        .marquee {
-            overflow: hidden;
-            white-space: nowrap;
-            box-sizing: border-box;
-            width: 100vw;
-            position: relative;
-            left: 50%;
-            right: 50%;
-            margin-left: -50vw;
-            margin-right: -50vw;
-        }
-        .marquee-content {
-            display: inline-block;
-            animation: marquee 15s linear infinite;
-        }
-        @keyframes marquee {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-        .text-3d {
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), -2px -2px 4px rgba(255, 255, 255, 0.3);
-        }
-        .canvas-container {
-            max-width: 100%;
-            overflow: auto;
-        }
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-        .tooltip .tooltip-text {
-            visibility: hidden;
-            width: 140px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 4px;
-            padding: 4px;
-            position: absolute;
-            z-index: 10;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 0.75rem;
-        }
-        .tooltip .tooltip-text::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #333 transparent transparent transparent;
-        }
-        .tooltip:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
-        .nav-menu {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            width: 75vw;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease-in-out;
-            z-index: 50;
-        }
-        .nav-menu.open {
-            transform: translateX(0);
-        }
-        .nav-menu::-webkit-scrollbar {
-            display: none;
-        }
-        .nav-menu {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .chart-container {
-            max-width: 100%;
-            height: 600px;
-            position: relative;
-            border-radius: 0.5rem;
-            overflow: hidden;
-        }
-        .header-container {
-            position: sticky;
-            top: 0;
-            z-index: 60;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            width: 100%;
-        }
-        .burger-container,
-        .buy-bandana-container {
-            display: inline-block;
-        }
-        .burger-button,
-        .buy-bandana-button {
-            background-color: #f59e0b;
-            color: white;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            line-height: 1.25rem;
-            display: flex;
-            align-items: center;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-        .burger-button:hover,
-        .buy-bandana-button:hover {
-            background-color: #d97706;
-            transform: scale(1.05);
-        }
-        .contract-address {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 280px;
-            font-family: monospace;
-        }
-        #welcomePopup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 70;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        @media (max-width: 640px) {
-            .chart-container {
-                height: 400px;
-            }
-            .header-container {
-                padding: 0.75rem;
-            }
-            .contract-address {
-                max-width: 200px;
-                font-size: 0.875rem;
-            }
-            .marquee-content {
-                font-size: 0.875rem;
-                animation-duration: 12s;
-            }
-            .canvas-container canvas {
-                width: 100% !important;
-                height: auto !important;
-                max-width: 400px;
-                max-height: 400px;
-            }
-            .burger-button,
-            .buy-bandana-button {
-                padding: 0.5rem 0.75rem;
-                font-size: 0.75rem;
-            }
-        }
-        @media (min-width: 641px) {
-            .nav-menu {
-                width: 16rem;
-            }
-        }
-        @media (min-width: 641px) and (max-width: 1024px) {
-            .canvas-container canvas {
-                width: 100% !important;
-                height: auto !important;
-                max-width: 500px;
-                max-height: 500px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bandana Memecoin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto&family=Poppins&family=Montserrat&family=Arial&family=Times+New+Roman&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { height: 100%; font-family: 'Orbitron', sans-serif; overflow: hidden; }
+
+    #bg-video {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    #home-header, #welcome-text {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight: bold;
+      display: flex;
+      gap: 10px;
+      z-index: 100;
+      opacity: 1;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    #home-header.hide-ui, #welcome-text.hide-ui {
+      opacity: 0;
+      transform: translate(-50%, -20px);
+      pointer-events: none;
+    }
+
+    #home-header { top: 10%; font-size: 4rem; }
+    #welcome-text { bottom: 5%; font-size: 2.5rem; }
+
+    #home-header span, #welcome-text span {
+      animation: pulse 1.5s infinite;
+    }
+
+    #home-header span:nth-child(1), #welcome-text span:nth-child(1) { color: #ff6f61; }
+    #home-header span:nth-child(2), #welcome-text span:nth-child(2) { color: #ff8a80; }
+    #home-header span:nth-child(3), #welcome-text span:nth-child(3) { color: #fdd835; }
+    #home-header span:nth-child(4), #welcome-text span:nth-child(4) { color: #64b5f6; }
+    #home-header span:nth-child(5), #welcome-text span:nth-child(5) { color: #81c784; }
+    #home-header span:nth-child(6), #welcome-text span:nth-child(6) { color: #ba68c8; }
+    #home-header span:nth-child(7), #welcome-text span:nth-child(7) { color: #e57373; }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.7; }
+    }
+
+    #burger {
+      position: fixed;
+      top: 20px; right: 20px;
+      width: 35px; height: 30px;
+      z-index: 101;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .bar {
+      background: #fff;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .bar:nth-child(1) { height: 5px; width: 100%; }
+    .bar:nth-child(2) { height: 4px; width: 80%; }
+    .bar:nth-child(3) { height: 3px; width: 60%; }
+
+    #burger.open .bar:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+      width: 100%;
+    }
+
+    #burger.open .bar:nth-child(2) {
+      opacity: 0;
+    }
+
+    #burger.open .bar:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+      width: 100%;
+    }
+
+    #menu {
+      position: fixed;
+      top: 0; right: -300px;
+      width: 300px; height: 100%;
+      background: rgba(0,0,0,0.95);
+      color: #fff;
+      padding: 60px 20px;
+      transition: right 0.3s ease;
+      z-index: 99;
+    }
+
+    #menu.open { right: 0; }
+
+    #menu a {
+      display: block;
+      margin: 20px 0;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+    }
+
+    #menu a:hover { color: #ff6f61; }
+
+    .section {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90vw;
+      height: 90vh;
+      background: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      padding: 120px 40px 40px;
+      border-radius: 12px;
+      display: none;
+      z-index: 98;
+      overflow-y: auto;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      opacity: 0;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .section.active {
+      display: block;
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+
+    .section h2 {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2.5rem;
+      color: #ff6f61;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.5s ease 0.2s;
+    }
+
+    .section.active h2 {
+      opacity: 1;
+    }
+
+    a { color: #fff; text-decoration: underline; }
+
+    ul, ol { font-size: 1.1rem; list-style: none; padding-left: 0; }
+
+    .step-item {
+      border: 2px solid #fff;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .step-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+    }
+
+    #tokenomics .step-item:nth-child(1) { color: #ff6f61; }
+    #tokenomics .step-item:nth-child(2) { color: #fdd835; }
+    #tokenomics .step-item:nth-child(3) { color: #64b5f6; }
+    #tokenomics .step-item:nth-child(4) { color: #81c784; }
+
+    #buy .step-item:nth-child(1) { color: #ff6f61; }
+    #buy .step-item:nth-child(2) { color: #fdd835; }
+    #buy .step-item:nth-child(3) { color: #64b5f6; }
+
+    #why .step-item:nth-child(1) { color: #ff6f61; }
+    #why .step-item:nth-child(2) { color: #fdd835; }
+    #why .step-item:nth-child(3) { color: #64b5f6; }
+
+    #social .social-item {
+      display: flex;
+      align-items: center;
+      border: 2px solid #fff;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    #social .social-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+    }
+
+    #social .social-item img {
+      width: 50px;
+      height: 50px;
+      margin-right: 15px;
+    }
+
+    #social .social-item div {
+      flex: 1;
+    }
+
+    /* Editor Styles */
+    .editor { text-align: center; }
+    .editor input, .editor select, .editor button { margin: 10px; padding: 5px; }
+    #editor-container { margin: 20px auto; background: transparent; }
+    .overlay { position: absolute; border: 1px dashed #fff; cursor: move; }
+    .overlay img { width: 100%; height: 100%; pointer-events: none; }
+    .text-overlay { position: absolute; cursor: move; white-space: nowrap; }
+    .handle { position: absolute; width: 10px; height: 10px; background: #fff; border-radius: 50%; }
+    .handle.nw { top: -5px; left: -5px; cursor: nw-resize; }
+    .handle.n { top: -5px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
+    .handle.ne { top: -5px; right: -5px; cursor: ne-resize; }
+    .handle.w { left: -5px; top: 50%; transform: translateY(-50%); cursor: w-resize; }
+    .handle.e { right: -5px; top: 50%; transform: translateY(-50%); cursor: e-resize; }
+    .handle.sw { bottom: -5px; left: -5px; cursor: sw-resize; }
+    .handle.s { bottom: -5px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
+    .handle.se { bottom: -5px; right: -5px; cursor: se-resize; }
+    .selected { outline: 2px solid red; }
+
+    /* Token Info Styles */
+    #token-info .contract-address {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #token-info .contract-address span {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    #token-info .step-item:nth-child(1) { color: #ff6f61; }
+    #token-info .step-item:nth-child(2) { color: #ff8a80; }
+    #token-info .step-item:nth-child(3) { color: #fdd835; }
+    #token-info .step-item:nth-child(4) { color: #64b5f6; }
+    #token-info .step-item:nth-child(5) { color: #81c784; }
+    #token-info .step-item:nth-child(6) { color: #ba68c8; }
+    #token-info .step-item:nth-child(7) { color: #e57373; }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans">
-    <!-- Welcome Pop-up -->
-    <div id="welcomePopup" class="flex flex-col items-center justify-center text-center">
-        <h2 class="text-2xl sm:text-3xl font-bold text-yellow-500 mb-6">Are you ready to join the Bandana Cult?</h2>
-        <button id="joinButton" class="bg-yellow-500 text-white py-2 px-6 rounded-lg hover:bg-yellow-600 transition duration-300 text-sm sm:text-base">Yes</button>
+<body>
+
+  <video id="bg-video" autoplay muted loop>
+    <source src="https://i.imgur.com/O2ShkYu.mp4" type="video/mp4" />
+  </video>
+
+  <div id="home-header">
+    <span>B</span><span>A</span><span>N</span><span>D</span><span>A</span><span>N</span><span>A</span>
+  </div>
+
+  <div id="welcome-text">
+    <span>W</span><span>E</span><span>L</span><span>C</span><span>O</span><span>M</span><span>E</span>
+  </div>
+
+  <div id="burger">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
+
+  <div id="menu">
+    <a href="#" id="home-link">Home</a>
+    <a href="#" data-section="about">About</a>
+    <a href="#" data-section="token-info">Contract and Token Info</a>
+    <a href="#" data-section="tokenomics">Tokenomics</a>
+    <a href="#" data-section="buy">How to Buy</a>
+    <a href="#" data-section="why">Why Buy</a>
+    <a href="#" data-section="social">Social Links</a>
+    <a href="#" data-section="create">Create Your Bandana Profile</a>
+  </div>
+
+  <div id="home" class="section"><h2>Welcome to Bandana</h2><p>Express your identity. Customize your profile. Join the movement.</p></div>
+
+  <div id="about" class="section">
+    <h2>About Bandana</h2>
+    <p>🌟 <strong>Welcome to the $Bandana Cult</strong>: Dive into a world where bold style fuses with the lightning-fast power of Solana. Customize your bandana to reflect your unique identity and join a vibrant community of rebels and innovators.</p>
+    <p>🚀 <strong>Our Mission</strong>: To empower individuals to express their creed through customizable digital assets, fostering a movement of self-expression on the blockchain. Whether you're a crypto enthusiast or a style icon, $BANDANA lets you stand out in the digital realm.</p>
+    <p>💎 <strong>Why Bandana?</strong>: Inspired by the timeless symbol of rebellion, unity, and adventure, $BANDANA is more than a memecoin—it's a statement of identity. With zero transaction taxes, strategic liquidity burns, and full dedication of creator funds to marketing, we're engineered for explosive growth, community rewards, and long-term sustainability.</p>
+    <p>👥 <strong>Join the Movement</strong>: Become part of a growing cult that's redefining digital expression. Follow us on socials, create your personalized profile, and represent your creed today. Together, we're building a bolder, more connected future on Solana.</p>
+  </div>
+
+  <div id="token-info" class="section">
+    <h2>Contract and Token Info</h2>
+    <div class="contract-address">
+      <strong>Contract Address:</strong> <span id="contract-addr">J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh</span>
+      <button onclick="copyContract()">Copy</button>
     </div>
-    <!-- Header with Sticky Buttons -->
-    <div class="header-container">
-        <div class="burger-container">
-            <button id="burgerMenu" class="burger-button">
-                <i class="fas fa-bars text-lg"></i>
-            </button>
-        </div>
-        <div class="buy-bandana-container tooltip">
-            <a href="https://pump.fun/coin/J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh" target="_blank" rel="noopener noreferrer" class="buy-bandana-button">
-                <span>Buy Bandana</span>
-                <span class="ml-1">💸</span>
-            </a>
-            <span class="tooltip-text">Buy BANDANA on Pump.fun</span>
-        </div>
+    <ul>
+      <li class="step-item">💲 <strong>Price:</strong> N/A</li>
+      <li class="step-item">📊 <strong>24h Volume:</strong> N/A</li>
+      <li class="step-item">🔢 <strong>Total Supply:</strong> 1 Billion</li>
+      <li class="step-item">🔄 <strong>Circulating Supply:</strong> N/A</li>
+      <li class="step-item">🛒 <strong>Market Cap:</strong> N/A</li>
+      <li class="step-item">👥 <strong>Holders:</strong> N/A</li>
+      <li class="step-item">📝 <strong>Transactions:</strong> N/A</li>
+    </ul>
+  </div>
+
+  <div id="tokenomics" class="section">
+    <h2>💰 Tokenomics</h2>
+    <ul>
+      <li class="step-item">📦 <strong>Total Supply:</strong> 1 Billion<br>We've minted a colossal 1 billion $BANDANA tokens, striking the perfect balance between abundance for community growth and scarcity to drive value sky-high in the crypto frontier.</li>
+      <li class="step-item">🚫 <strong>Tax:</strong> 0%<br>Zero taxes on transactions mean every trade is frictionless, keeping more coins in your pocket and letting the market flow freely like a wild west wind.</li>
+      <li class="step-item">🔥 <strong>Liquidity Burn:</strong> 1%<br>A slim 1% of liquidity is burned forever, tightening the supply over time and igniting potential price surges as we build a stronger, more resilient pool.</li>
+      <li class="step-item">📣 <strong>Marketing Funds:</strong> 100% of creator funds<br>All creator funds are dedicated to marketing mastery, fueling epic campaigns, partnerships, and hype to propel $BANDANA to legendary status in the memecoin realm.</li>
+    </ul>
+  </div>
+
+  <div id="buy" class="section">
+    <h2>🛒 How to Buy</h2>
+    <ol>
+      <li class="step-item">🦊 <strong>Create a Wallet:</strong> Download Phantom wallet from <a href="https://phantom.app" target="_blank">phantom.app</a><br>Phantom is a secure, user-friendly wallet designed for the Solana blockchain. After downloading, follow the setup instructions to create your wallet, securely store your seed phrase, and get ready to hold $BANDANA.</li>
+      <li class="step-item">💸 <strong>Buy SOL:</strong> Get your hands on some SOL from your favorite exchange.<br>Purchase Solana (SOL) on centralized exchanges like Binance, Coinbase, or Kraken. Once bought, transfer the SOL to your Phantom wallet address for seamless decentralized trading.</li>
+      <li class="step-item">🔁 <strong>Swap:</strong> Use Raydium or Jupiter to trade your SOL for Bandana.<br>Connect your Phantom wallet to a Solana DEX like Raydium (raydium.io) or Jupiter (jup.ag). Paste the $BANDANA contract address (J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh), select the amount of SOL to swap, and confirm the transaction to join the cult.</li>
+    </ol>
+  </div>
+
+  <div id="why" class="section">
+    <h2>Why Buy</h2>
+    <div class="step-item">🎨 <strong>Custom profiles:</strong> Unleash your inner rebel by crafting a one-of-a-kind bandana avatar that showcases your unique style and creed in the digital world.</div>
+    <div class="step-item">👥 <strong>Community perks:</strong> Dive into an exclusive cult of bandana bearers, enjoying airdrops, VIP events, and collaborative adventures that make you part of something bigger.</div>
+    <div class="step-item">🗺️ <strong>Future roadmap:</strong> Buckle up for thrilling updates, including NFT drops, metaverse integrations, and utility expansions that will evolve $BANDANA into a powerhouse of innovation.</div>
+  </div>
+
+  <div id="social" class="section">
+    <h2>📢 Social Links</h2>
+    <p>Stay connected with the Bandana cult:</p>
+    <div class="social-item">
+      <img src="https://i.imgur.com/MX10kLM.png" alt="X Logo">
+      <div>
+        <a href="https://x.com/Bandana_sol" target="_blank">X (@Bandana_sol)</a>
+        <p>Join our X community with 68 followers. Follow for updates, memes, and discussions on $BANDANA.</p>
+      </div>
     </div>
-    <!-- Hero Section -->
-    <section id="home" class="ray-bg py-10 sm:py-16 md:py-20 min-h-[100vh] flex items-center">
-        <div class="container mx-auto px-4 sm:px-6 md:px-8 max-w-7xl">
-            <nav id="navMenu" class="nav-menu bg-yellow-500 text-white flex flex-col shadow-lg overflow-y-auto">
-                <button id="closeMenu" class="text-xl sm:text-2xl p-3 sm:p-4 self-end hover:text-gray-200">
-                    <i class="fas fa-times"></i>
-                </button>
-                <ul class="flex flex-col space-y-3 sm:space-y-4 p-3 sm:p-4">
-                    <li><a href="#home" class="text-base sm:text-lg font-semibold hover:text-gray-200 transition duration-300">Home</a></li>
-                    <li><a href="#about" class="text-base sm:text-lg font-semibold hover:text-gray-200 transition duration-300">About</a></li>
-                    <li><a href="#create-profile" class="text-base sm:text-lg font-semibold hover:text-gray-200 transition duration-300">Create Profile</a></li>
-                    <li><a href="#tokenomics" class="text-base sm:text-lg font-semibold hover:text-gray-200 transition duration-300">Tokenomics</a></li>
-                    <li><a href="#how-to-buy" class="text-base sm:text-lg font-semibold hover:text-gray-200 transition duration-300">How to Buy</a></li>
-                    <li><a href="#social-links" class="text-base sm:text-lg font-semibold hover:text-gray-200 transition duration-300">Social Links</a></li>
-                    <li><a href="#chart" class="text-base sm:text-lg font-semibold hover:text-gray-200 transition duration-300">Price Chart</a></li>
-                </ul>
-            </nav>
-            <div class="flex flex-col items-center">
-                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-yellow-500 mb-6 sm:mb-8">$Bandana</h1>
-                <img src="https://i.imgur.com/FEciiZa.gif" alt="Bandana" class="w-40 sm:w-48 md:w-64 h-auto mb-6 sm:mb-8 transition-transform duration-300 hover:scale-110">
-                <p class="text-base sm:text-lg text-black mb-6 sm:mb-8 max-w-md mx-auto">Get your bandana, Join the cult and Become the cult</p>
-                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 items-center">
-                    <a href="#create-profile" id="createProfileLink" class="bg-yellow-500 text-white py-2 px-4 sm:px-6 rounded-lg hover:bg-yellow-600 transition duration-300 text-sm sm:text-base">Create Your Bandana Profile</a>
-                    <div class="contract-address bg-yellow-500 text-white py-2 px-4 rounded-lg text-sm sm:text-base">J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh</div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="social-item">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/1024px-Telegram_logo.svg.png" alt="Telegram Logo">
+      <div>
+        <a href="https://t.me/bandana_sol" target="_blank">Telegram (@bandana_sol)</a>
+        <p>Join our Telegram channel with 69 members (6 online). The Bandana Cult on Solana – chat, share, and stay in the loop.</p>
+      </div>
+    </div>
+  </div>
 
-    <!-- Marquee Section -->
-    <section class="bg-yellow-500 py-3 sm:py-4">
-        <div class="marquee">
-            <div class="marquee-content text-white text-base sm:text-lg font-semibold">
-                Join the $Bandana Cult! • Own Your Style • Be Bold on Solana • Represent the Movement • Create Your Legacy •
-            </div>
-        </div>
-    </section>
+  <div id="create" class="section">
+    <h2>Create Your Bandana Profile</h2>
+    <div class="editor">
+      <p>Upload your base image (e.g., your photo):</p>
+      <input type="file" id="base-upload" accept="image/*">
+      <div id="editor-container" style="position: relative; width: 600px; height: 600px; border: 1px solid white; margin: 20px auto; overflow: hidden;">
+        <img id="base-image" src="" style="width: 100%; height: 100%; object-fit: contain; display: none;">
+      </div>
+      <div>
+        <h3>Add Bandana Overlay</h3>
+        <select id="bandana-select">
+          <option value="">Select Bandana</option>
+          <option value="https://i.imgur.com/JjbEt47.png">Paisley design</option>
+          <option value="https://i.imgur.com/hbpJtdo.png">USA design</option>
+          <option value="https://i.imgur.com/1P7nden.png">Bandana with hair</option>
+          <option value="https://i.imgur.com/1x6RDiH.png">Paisley design 2</option>
+          <option value="https://i.imgur.com/9bmIc1t.png">Paisley design 3</option>
+          <option value="https://i.imgur.com/2IA7MMP.png">Paisley design ft sol</option>
+          <option value="https://i.imgur.com/rT1olJI.png">Tech design</option>
+          <option value="https://i.imgur.com/McFB24z.png">B&W paisley</option>
+        </select>
+        <button id="add-bandana">Add</button>
+      </div>
+      <div>
+        <h3>Add Logo Overlay</h3>
+        <select id="logo-select">
+          <option value="">Select Logo</option>
+          <option value="https://i.imgur.com/WBqPaQB.png">SOL</option>
+          <option value="https://i.imgur.com/MX10kLM.png">X</option>
+          <option value="https://i.imgur.com/ww2FqF2.png">USA</option>
+          <option value="https://i.imgur.com/JsRg8u3.png">GROK</option>
+        </select>
+        <button id="add-logo">Add</button>
+      </div>
+      <div>
+        <h3>Add Text</h3>
+        <input type="text" id="text-content" placeholder="Enter text">
+        <select id="text-font">
+          <option value="Orbitron">Orbitron</option>
+          <option value="Roboto">Roboto</option>
+          <option value="Poppins">Poppins</option>
+          <option value="Montserrat">Montserrat</option>
+          <option value="Arial">Arial</option>
+          <option value="Times New Roman">Times New Roman</option>
+        </select>
+        <input type="number" id="text-size" value="20" min="10" max="100"> px
+        <input type="color" id="text-color" value="#ffffff">
+        <button id="add-text">Add</button>
+      </div>
+      <button id="delete-selected">Delete Selected</button>
+      <button id="save-profile">Save Profile Image</button>
+    </div>
+  </div>
 
-    <!-- About Section -->
-    <section id="about" class="py-10 sm:py-16 md:py-20 bg-white">
-        <div class="container mx-auto px-4 sm:px-6 md:px-8 max-w-7xl">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-                <div>
-                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">About Bandana</h2>
-                    <p class="text-base sm:text-lg text-gray-600">
-                        Welcome to the $Bandana cult, where bold style meets the power of Solana. Stand out with your unique bandana design and make a statement—be part of the movement, own your identity. Join us and represent your creed today.
-                    </p>
-                </div>
-                <div>
-                    <img src="https://i.imgur.com/JjcYWEh.png" alt="Bandana" class="w-full h-auto rounded-lg shadow-md">
-                </div>
-            </div>
-        </div>
-    </section>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const burger = document.getElementById('burger');
+      const menu = document.getElementById('menu');
+      const homeHeader = document.getElementById('home-header');
+      const welcomeText = document.getElementById('welcome-text');
+      const homeSection = document.getElementById('home');
 
-    <!-- Create Your Bandana Profile Section -->
-    <section id="create-profile" class="py-10 sm:py-16 md:py-20 bg-gray-100">
-        <div class="container mx-auto px-4 sm:px-6 md:px-8 max-w-7xl">
-            <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 text-center">Create Your Bandana Profile</h2>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8">
-                <div class="col-span-1 space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Upload Base Image</label>
-                        <input type="file" id="baseImageUpload" accept="image/*" class="w-full p-2 border rounded text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Select Bandana</label>
-                        <select id="bandanaSelect" class="w-full p-2 border rounded text-sm">
-                            <option value="">Choose a bandana</option>
-                            <option value="https://i.imgur.com/JjbEt47.png">Paisley Design</option>
-                            <option value="https://i.imgur.com/hbpJtdo.png">USA Design</option>
-                            <option value="https://i.imgur.com/1P7nden.png">Bandana with Hair</option>
-                            <option value="https://i.imgur.com/1x6RDiH.png">Paisley Design 2</option>
-                            <option value="https://i.imgur.com/9bmIc1t.png">Paisley Design 3</option>
-                            <option value="https://i.imgur.com/2IA7MMP.png">Paisley Design ft Sol</option>
-                            <option value="https://i.imgur.com/rT1olJI.png">Tech Design</option>
-                            <option value="https://i.imgur.com/McFB24z.png">B&W Paisley</option>
-                            <option value="https://i.imgur.com/NIOJlKd.png">Tupac Style Black</option>
-                            <option value="https://i.imgur.com/hAd3ATL.png">Tupac Style White</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Select Logo</label>
-                        <select id="logoSelect" class="w-full p-2 border rounded text-sm">
-                            <option value="">Choose a logo</option>
-                            <option value="https://i.imgur.com/WBqPaQB.png">SOL</option>
-                            <option value="https://i.imgur.com/zVY5E8R.png">SOL 2</option>
-                            <option value="https://i.imgur.com/MX10kLM.png">X</option>
-                            <option value="https://i.imgur.com/ww2FqF2.png">USA</option>
-                            <option value="https://i.imgur.com/JsRg8u3.png">Grok</option>
-                            <option value="https://i.imgur.com/HuZAhPQ.png">Grok 2</option>
-                            <option value="https://i.imgur.com/dxTee8L.png">Pump</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Add Text</label>
-                        <input type="text" id="customText" placeholder="Enter text" class="w-full p-2 border rounded mb-2 text-sm">
-                        <select id="fontSelect" class="w-full p-2 border rounded mb-2 text-sm">
-                            <option value="Arial">Arial</option>
-                            <option value="Comic Sans MS">Comic Sans MS</option>
-                            <option value="Impact">Impact</option>
-                            <option value="Lobster">Lobster</option>
-                            <option value="Montserrat">Montserrat</option>
-                            <option value="Pacifico">Pacifico</option>
-                            <option value="Roboto">Roboto</option>
-                            <option value="Bangers">Bangers</option>
-                            <option value="Oswald">Oswald</option>
-                            <option value="Playfair Display">Playfair Display</option>
-                        </select>
-                        <select id="textStyle" class="w-full p-2 border rounded mb-2 text-sm">
-                            <option value="normal">Normal</option>
-                            <option value="bold">Bold</option>
-                            <option value="text-3d">3D</option>
-                        </select>
-                        <input type="color" id="textColor" value="#000000" class="w-full h-10 p-1 border rounded mb-2" title="Select text color">
-                        <button id="addText" class="w-full bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 mt-2 text-sm">Add Text</button>
-                    </div>
-                    <div class="space-y-2">
-                        <button id="undo" class="w-full bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 text-sm">Undo</button>
-                        <button id="redo" class="w-full bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 text-sm">Redo</button>
-                        <button id="lock" class="w-full bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 text-sm">Lock/Unlock</button>
-                        <button id="delete" class="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 text-sm">Delete Selected</button>
-                        <button id="download" class="w-full bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 text-sm">Download</button>
-                    </div>
-                </div>
-                <div class="col-span-1 md:col-span-3">
-                    <div class="canvas-container">
-                        <canvas id="canvas" class="border shadow-lg"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+      // Show header and welcome text only on home
+      const updateHomeUI = () => {
+        const isHome = !menu.classList.contains('open') && !document.querySelector('.section.active');
+        homeHeader.classList.toggle('hide-ui', !isHome);
+        welcomeText.classList.toggle('hide-ui', !isHome);
+      };
 
-    <!-- Tokenomics Section -->
-    <section id="tokenomics" class="py-10 sm:py-16 md:py-20 bg-white">
-        <div class="container mx-auto px-4 sm:px-6 md:px-8 max-w-7xl">
-            <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 text-center">Tokenomics</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                <div class="bg-yellow-500 p-4 sm:p-6 rounded-lg text-center shadow-md">
-                    <i class="fas fa-gem text-3xl sm:text-4xl text-black mb-4"></i>
-                    <h3 class="text-lg sm:text-xl font-semibold text-black mb-2">Total Supply</h3>
-                    <p class="text-base sm:text-lg text-black">1 Billion</p>
-                </div>
-                <div class="bg-yellow-500 p-4 sm:p-6 rounded-lg text-center shadow-md">
-                    <i class="fas fa-sack-dollar text-3xl sm:text-4xl text-black mb-4"></i>
-                    <h3 class="text-lg sm:text-xl font-semibold text-black mb-2">Tax</h3>
-                    <p class="text-base sm:text-lg text-black">0%</p>
-                </div>
-                <div class="bg-yellow-500 p-4 sm:p-6 rounded-lg text-center shadow-md">
-                    <i class="fas fa-fire text-3xl sm:text-4xl text-black mb-4"></i>
-                    <h3 class="text-lg sm:text-xl font-semibold text-black mb-2">Liquidity Burn</h3>
-                    <p class="text-base sm:text-lg text-black">1%</p>
-                </div>
-                <div class="bg-yellow-500 p-4 sm:p-6 rounded-lg text-center shadow-md">
-                    <i class="fas fa-wallet text-3xl sm:text-4xl text-black mb-4"></i>
-                    <h3 class="text-lg sm:text-xl font-semibold text-black mb-2">Marketing Funds</h3>
-                    <p class="text-base sm:text-lg text-black">100% of creator funds</p>
-                </div>
-            </div>
-        </div>
-    </section>
+      // Initial state
+      updateHomeUI();
 
-    <!-- How to Buy Section -->
-    <section id="how-to-buy" class="py-10 sm:py-16 md:py-20 bg-gray-100">
-        <div class="container mx-auto px-4 sm:px-6 md:px-8 max-w-7xl">
-            <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 text-center">How to Buy</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                <div class="bg-yellow-500 p-4 sm:p-6 rounded-lg text-center shadow-md">
-                    <i class="fas fa-wallet text-3xl sm:text-4xl text-black mb-4"></i>
-                    <h3 class="text-lg sm:text-xl font-semibold text-black mb-2">Create a Wallet</h3>
-                    <p class="text-base sm:text-lg text-black">Download Phantom wallet from phantom.app to get started.</p>
-                </div>
-                <div class="bg-yellow-500 p-4 sm:p-6 rounded-lg text-center shadow-md">
-                    <i class="fas fa-shopping-cart text-3xl sm:text-4xl text-black mb-4"></i>
-                    <h3 class="text-lg sm:text-xl font-semibold text-black mb-2">Buy SOL</h3>
-                    <p class="text-base sm:text-lg text-black">Get your hands on some SOL from your favorite exchange.</p>
-                </div>
-                <div class="bg-yellow-500 p-4 sm:p-6 rounded-lg text-center shadow-md">
-                    <i class="fas fa-exchange-alt text-3xl sm:text-4xl text-black mb-4"></i>
-                    <h3 class="text-lg sm:text-xl font-semibold text-black mb-2">Swap</h3>
-                    <p class="text-base sm:text-lg text-black">Use Radium or Jupiter to trade your SOL for Bandana.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+      burger.addEventListener('click', () => {
+        burger.classList.toggle('open');
+        menu.classList.toggle('open');
+        updateHomeUI();
+      });
 
-    <!-- Join the Biggest Crypto Cult Section -->
-    <section id="social-links" class="py-10 sm:py-16 md:py-20 bg-white">
-        <div class="container mx-auto px-4 sm:px-6 md:px-8 max-w-7xl">
-            <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 text-center">Join the Biggest Crypto Cult</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-4xl mx-auto">
-                <div class="bg-yellow-500 p-4 sm:p-6 rounded-lg text-center shadow-md">
-                    <i class="fab fa-x-twitter text-3xl sm:text-4xl text-black mb-4"></i>
-                    <h3 class="text-lg sm:text-xl font-semibold text-black mb-2">
-                        <a href="https://x.com/Bandana_sol" target="_blank" rel="noopener noreferrer" class="hover:underline">Follow Us on Twitter!</a>
-                    </h3>
-                    <p class="text-base sm:text-lg text-black">Get the latest updates and join the conversation.</p>
-                </div>
-                <div class="bg-yellow-500 p-4 sm:p-6 rounded-lg text-center shadow-md">
-                    <i class="fab fa-telegram text-3xl sm:text-4xl text-black mb-4"></i>
-                    <h3 class="text-lg sm:text-xl font-semibold text-black mb-2">
-                        <a href="https://t.me/bandana_sol" target="_blank" rel="noopener noreferrer" class="hover:underline">Chat with Us on Telegram!</a>
-                    </h3>
-                    <p class="text-base sm:text-lg text-black">Connect with the community and share ideas.</p>
-                </div>
-            </div>
-            <div class="text-center mt-6 sm:mt-8">
-                <p class="text-sm sm:text-base text-gray-600 font-sans">This website code was generated by Grok.</p>
-            </div>
-        </div>
-    </section>
+      const links = menu.querySelectorAll('a[data-section]');
+      links.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const sectionId = link.dataset.section;
+          document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+          document.getElementById(sectionId).classList.add('active');
+          menu.classList.remove('open');
+          burger.classList.remove('open');
+          updateHomeUI();
+        });
+      });
 
-    <!-- Price Chart Section -->
-    <section id="chart" class="py-10 sm:py-16 md:py-20 bg-gray-100">
-        <div class="container mx-auto px-4 sm:px-6 md:px-8 max-w-7xl">
-            <div class="flex items-center justify-between mb-6 sm:mb-8">
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Price Chart</h2>
-                <div class="tooltip">
-                    <button onclick="document.getElementById('chartIframe').contentWindow.location.reload()" class="bg-yellow-500 text-white p-2 rounded-lg hover:bg-yellow-600 transition duration-300">
-                        <i class="fas fa-sync-alt text-sm sm:text-base"></i>
-                    </button>
-                    <span class="tooltip-text">Live BANDANA price feed on Dexscreener</span>
-                </div>
-            </div>
-            <div class="chart-container bg-white shadow-md">
-                <iframe
-                    id="chartIframe"
-                    src="https://dexscreener.com/solana/35Q2U4RBUiwzRFXnpu3PE9Dc1tKmCgRC4u9fQbgfSKaU"
-                    width="100%"
-                    height="100%"
-                    frameborder="0"
-                    allowfullscreen>
-                </iframe>
-            </div>
-        </div>
-    </section>
+      const homeLink = document.getElementById('home-link');
+      homeLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+        menu.classList.remove('open');
+        burger.classList.remove('open');
+        updateHomeUI();
+      });
 
-    <!-- Footer -->
-    <footer class="bg-yellow-500 text-white text-center py-3 sm:py-4">
-        <p class="text-sm sm:text-base">© 2025 Bandana Cult. All rights reserved.</p>
-    </footer>
+      // Profile Editor Functionality
+      const baseUpload = document.getElementById('base-upload');
+      const baseImage = document.getElementById('base-image');
+      const editorContainer = document.getElementById('editor-container');
+      const addBandanaBtn = document.getElementById('add-bandana');
+      const bandanaSelect = document.getElementById('bandana-select');
+      const addLogoBtn = document.getElementById('add-logo');
+      const logoSelect = document.getElementById('logo-select');
+      const addTextBtn = document.getElementById('add-text');
+      const textContent = document.getElementById('text-content');
+      const textFont = document.getElementById('text-font');
+      const textSize = document.getElementById('text-size');
+      const textColor = document.getElementById('text-color');
+      const deleteBtn = document.getElementById('delete-selected');
+      const saveBtn = document.getElementById('save-profile');
 
-    <script>
-        // Welcome Pop-up
-        document.getElementById('joinButton').addEventListener('click', () => {
-            document.getElementById('welcomePopup').style.display = 'none';
+      baseUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const url = URL.createObjectURL(file);
+          baseImage.src = url;
+          baseImage.style.display = 'block';
+        }
+      });
+
+      function createOverlay(src, isText = false, textOptions = {}) {
+        const overlay = document.createElement('div');
+        if (isText) {
+          overlay.classList.add('text-overlay');
+          overlay.innerText = textOptions.content;
+          overlay.style.fontFamily = textOptions.font;
+          overlay.style.fontSize = `${textOptions.size}px`;
+          overlay.style.color = textOptions.color;
+          overlay.style.left = '50px';
+          overlay.style.top = '50px';
+        } else {
+          overlay.classList.add('overlay');
+          const img = document.createElement('img');
+          img.src = src;
+          img.style.opacity = 0; // Prevent flash before load
+          img.onload = () => { img.style.opacity = 1; }; // Ensure image is loaded before display
+          overlay.appendChild(img);
+          overlay.style.width = '200px';
+          overlay.style.height = '200px';
+          overlay.style.left = '50px';
+          overlay.style.top = '50px';
+
+          // Add handles
+          ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se'].forEach(dir => {
+            const handle = document.createElement('div');
+            handle.classList.add('handle', dir);
+            overlay.appendChild(handle);
+          });
+        }
+        editorContainer.appendChild(overlay);
+        makeDraggable(overlay, isText);
+        if (!isText) makeResizable(overlay);
+
+        // Add selection on click
+        overlay.addEventListener('click', (e) => {
+          e.stopPropagation();
+          document.querySelectorAll('.overlay, .text-overlay').forEach(o => o.classList.remove('selected'));
+          overlay.classList.add('selected');
         });
 
-        // Toggle navigation menu
-        const burgerMenu = document.getElementById('burgerMenu');
-        const navMenu = document.getElementById('navMenu');
-        const closeMenu = document.getElementById('closeMenu');
-        const navLinks = navMenu.querySelectorAll('a');
-        const createProfileLink = document.getElementById('createProfileLink');
+        return overlay;
+      }
 
-        burgerMenu.addEventListener('click', () => {
-            navMenu.classList.toggle('open');
+      function makeDraggable(element, isText) {
+        let isDragging = false;
+        let startX, startY;
+
+        element.addEventListener('mousedown', (e) => {
+          if (!isText && e.target.classList.contains('handle')) return;
+          isDragging = true;
+          startX = e.clientX - element.getBoundingClientRect().left;
+          startY = e.clientY - element.getBoundingClientRect().top;
+          e.preventDefault();
         });
 
-        closeMenu.addEventListener('click', () => {
-            navMenu.classList.remove('open');
+        document.addEventListener('mousemove', (e) => {
+          if (isDragging) {
+            let newLeft = e.clientX - startX - editorContainer.getBoundingClientRect().left;
+            let newTop = e.clientY - startY - editorContainer.getBoundingClientRect().top;
+            // Constrain within editor bounds
+            newLeft = Math.max(0, Math.min(newLeft, editorContainer.offsetWidth - element.offsetWidth));
+            newTop = Math.max(0, Math.min(newTop, editorContainer.offsetHeight - element.offsetHeight));
+            element.style.left = `${newLeft}px`;
+            element.style.top = `${newTop}px`;
+          }
         });
 
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = link.getAttribute('href').substring(1);
-                const targetSection = document.getElementById(targetId);
-                if (targetSection) {
-                    targetSection.scrollIntoView({ behavior: 'smooth' });
-                    navMenu.classList.remove('open');
-                }
-            });
+        document.addEventListener('mouseup', () => {
+          isDragging = false;
         });
+      }
 
-        createProfileLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetSection = document.getElementById('create-profile');
-            if (targetSection) {
-                targetSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
+      function makeResizable(element) {
+        const handles = element.querySelectorAll('.handle');
+        handles.forEach(handle => {
+          handle.addEventListener('mousedown', (e) => {
+            e.stopPropagation();
+            let dir = handle.classList[1];
+            let startX = e.clientX;
+            let startY = e.clientY;
+            let startWidth = parseInt(element.style.width, 10);
+            let startHeight = parseInt(element.style.height, 10);
+            let startLeft = parseInt(element.style.left, 10);
+            let startTop = parseInt(element.style.top, 10);
 
-        // Initialize Fabric.js canvas
-        let canvas;
-        function initializeCanvas() {
-            if (canvas) {
-                canvas.dispose();
-            }
-            canvas = new fabric.Canvas('canvas', {
-                width: window.innerWidth <= 640 ? window.innerWidth - 32 : 600,
-                height: window.innerWidth <= 640 ? (window.innerWidth - 32) : 600,
-                backgroundColor: '#f0f0f0',
-                preserveObjectStacking: true
-            });
+            function onMouseMove(e) {
+              let dx = e.clientX - startX;
+              let dy = e.clientY - startY;
 
-            canvas.on('mouse:wheel', function(opt) {
-                const delta = opt.e.deltaY;
-                let zoom = canvas.getZoom();
-                zoom *= 0.999 ** delta;
-                if (zoom > 20) zoom = 20;
-                if (zoom < 0.01) zoom = 0.01;
-                canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
-                opt.e.preventDefault();
-                opt.e.stopPropagation();
-            });
+              if (dir.includes('e')) {
+                element.style.width = `${Math.max(50, startWidth + dx)}px`;
+              } else if (dir.includes('w')) {
+                element.style.width = `${Math.max(50, startWidth - dx)}px`;
+                element.style.left = `${startLeft + dx}px`;
+              }
 
-            let history = [];
-            let redoStack = [];
-            function saveState() {
-                redoStack = [];
-                history.push(JSON.stringify(canvas));
-                if (history.length > 50) history.shift();
+              if (dir.includes('s')) {
+                element.style.height = `${Math.max(50, startHeight + dy)}px`;
+              } else if (dir.includes('n')) {
+                element.style.height = `${Math.max(50, startHeight - dy)}px`;
+                element.style.top = `${startTop + dy}px`;
+              }
             }
 
-            document.getElementById('baseImageUpload').addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const imgObj = new Image();
-                    imgObj.src = event.target.result;
-                    imgObj.onload = function() {
-                        const image = new fabric.Image(imgObj, {
-                            left: 0,
-                            top: 0,
-                            scaleX: canvas.width / imgObj.width,
-                            scaleY: canvas.height / imgObj.height,
-                            selectable: false,
-                            evented: false,
-                            lockMovementX: true,
-                            lockMovementY: true,
-                            lockRotation: true,
-                            lockScalingX: true,
-                            lockScalingY: true
-                        });
-                        canvas.getObjects().forEach(obj => {
-                            if (obj.selectable) canvas.remove(obj);
-                        });
-                        canvas.add(image);
-                        canvas.sendToBack(image);
-                        canvas.renderAll();
-                        saveState();
-                    };
-                    imgObj.onerror = function() {
-                        console.error('Failed to load base image');
-                        alert('Failed to load the base image. Please try another file.');
-                    };
-                };
-                reader.readAsDataURL(file);
-            });
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', () => {
+              document.removeEventListener('mousemove', onMouseMove);
+            }, { once: true });
+          });
+        });
+      }
 
-            document.getElementById('bandanaSelect').addEventListener('change', function(e) {
-                const url = e.target.value;
-                if (url) {
-                    fabric.Image.fromURL(url, function(img) {
-                        img.set({
-                            left: canvas.width * 0.167,
-                            top: canvas.height * 0.167,
-                            scaleX: 0.5,
-                            scaleY: 0.5,
-                            selectable: true,
-                            evented: true,
-                            hasControls: true,
-                            crossOrigin: 'anonymous'
-                        });
-                        canvas.add(img);
-                        canvas.bringToFront(img);
-                        canvas.renderAll();
-                        saveState();
-                    }, { crossOrigin: 'anonymous' });
-                }
-            });
+      addBandanaBtn.addEventListener('click', () => {
+        const src = bandanaSelect.value;
+        if (src) createOverlay(src);
+      });
 
-            document.getElementById('logoSelect').addEventListener('change', function(e) {
-                const url = e.target.value;
-                if (url) {
-                    fabric.Image.fromURL(url, function(img) {
-                        img.set({
-                            left: canvas.width * 0.333,
-                            top: canvas.height * 0.333,
-                            scaleX: 0.3,
-                            scaleY: 0.3,
-                            selectable: true,
-                            evented: true,
-                            hasControls: true,
-                            crossOrigin: 'anonymous'
-                        });
-                        canvas.add(img);
-                        canvas.bringToFront(img);
-                        canvas.renderAll();
-                        saveState();
-                    }, { crossOrigin: 'anonymous' });
-                }
-            });
+      addLogoBtn.addEventListener('click', () => {
+        const src = logoSelect.value;
+        if (src) createOverlay(src);
+      });
 
-            document.getElementById('addText').addEventListener('click', function() {
-                const text = document.getElementById('customText').value;
-                const font = document.getElementById('fontSelect').value;
-                const style = document.getElementById('textStyle').value;
-                const color = document.getElementById('textColor').value;
-                if (text) {
-                    const textObj = new fabric.Text(text, {
-                        left: canvas.width * 0.25,
-                        top: canvas.height * 0.25,
-                        fontSize: window.innerWidth <= 640 ? 16 : 24,
-                        fontFamily: font,
-                        fontWeight: style === 'bold' ? 'bold' : 'normal',
-                        fill: color,
-                        selectable: true,
-                        evented: true,
-                        hasControls: true
-                    });
-                    if (style === 'text-3d') {
-                        textObj.set({
-                            shadow: '2px 2px 4px rgba(0,0,0,0.3), -2px -2px 4px rgba(255,255,255,0.3)'
-                        });
-                    }
-                    canvas.add(textObj);
-                    canvas.bringToFront(textObj);
-                    canvas.renderAll();
-                    saveState();
-                }
-            });
+      addTextBtn.addEventListener('click', () => {
+        const content = textContent.value;
+        if (content) {
+          createOverlay(null, true, {
+            content,
+            font: textFont.value,
+            size: textSize.value,
+            color: textColor.value
+          });
+        }
+      });
 
-            document.getElementById('undo').addEventListener('click', function() {
-                if (history.length > 1) {
-                    redoStack.push(history.pop());
-                    canvas.loadFromJSON(history[history.length - 1], () => {
-                        canvas.renderAll();
-                    });
-                }
-            });
+      deleteBtn.addEventListener('click', () => {
+        const selected = editorContainer.querySelector('.selected');
+        if (selected) selected.remove();
+      });
 
-            document.getElementById('redo').addEventListener('click', function() {
-                if (redoStack.length > 0) {
-                    const state = redoStack.pop();
-                    history.push(state);
-                    canvas.loadFromJSON(state, () => {
-                        canvas.renderAll();
-                    });
-                }
-            });
+      saveBtn.addEventListener('click', () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = editorContainer.offsetWidth;
+        canvas.height = editorContainer.offsetHeight;
+        const ctx = canvas.getContext('2d');
 
-            document.getElementById('lock').addEventListener('click', function() {
-                const activeObject = canvas.getActiveObject();
-                if (activeObject) {
-                    activeObject.set({
-                        lockMovementX: !activeObject.lockMovementX,
-                        lockMovementY: !activeObject.lockMovementY,
-                        lockRotation: !activeObject.lockRotation,
-                        lockScalingX: !activeObject.lockScalingX,
-                        lockScalingY: !activeObject.lockScalingY,
-                        selectable: !activeObject.selectable
-                    });
-                    canvas.renderAll();
-                    saveState();
-                }
-            });
-
-            document.getElementById('delete').addEventListener('click', function() {
-                const activeObject = canvas.getActiveObject();
-                if (activeObject) {
-                    canvas.remove(activeObject);
-                    canvas.renderAll();
-                    saveState();
-                }
-            });
-
-            document.getElementById('download').addEventListener('click', function() {
-                try {
-                    canvas.renderAll();
-                    const watermark = new fabric.Text('Bandana_sol', {
-                        left: canvas.width * 0.75,
-                        top: canvas.height * 0.917,
-                        fontSize: window.innerWidth <= 640 ? 14 : 20,
-                        fontFamily: 'Arial',
-                        fill: '#FFD700',
-                        selectable: false,
-                        evented: false
-                    });
-                    canvas.add(watermark);
-                    canvas.renderAll();
-
-                    setTimeout(() => {
-                        try {
-                            const dataURL = canvas.toDataURL({
-                                format: 'png',
-                                quality: 1,
-                                multiplier: 2
-                            });
-
-                            const link = document.createElement('a');
-                            link.href = dataURL;
-                            link.download = 'bandana_profile.png';
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-
-                            canvas.remove(watermark);
-                            canvas.renderAll();
-                        } catch (err) {
-                            console.error('Error generating data URL:', err);
-                            alert('Failed to download the image. Please ensure all images are loaded correctly and try again.');
-                        }
-                    }, 100);
-                } catch (err) {
-                    console.error('Error in download process:', err);
-                    alert('Failed to download the image. Please try again.');
-                }
-            });
-
-            canvas.on('object:modified', saveState);
+        // Draw base image if present
+        if (baseImage.src && baseImage.style.display !== 'none') {
+          ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
         }
 
-        initializeCanvas();
-
-        window.addEventListener('resize', () => {
-            const canvasElement = document.getElementById('canvas');
-            canvasElement.width = window.innerWidth <= 640 ? window.innerWidth - 32 : 600;
-            canvasElement.height = window.innerWidth <= 640 ? (window.innerWidth - 32) : 600;
-            initializeCanvas();
+        // Draw overlays in order
+        const overlays = editorContainer.querySelectorAll('.overlay, .text-overlay');
+        Promise.all(
+          Array.from(overlays).map(ov => {
+            if (ov.classList.contains('text-overlay')) {
+              const left = parseInt(ov.style.left, 10);
+              const top = parseInt(ov.style.top, 10);
+              ctx.font = `${ov.style.fontSize} ${ov.style.fontFamily}`;
+              ctx.fillStyle = ov.style.color;
+              ctx.fillText(ov.innerText, left, top + parseInt(ov.style.fontSize, 10));
+              return Promise.resolve();
+            } else {
+              const img = ov.querySelector('img');
+              const left = parseInt(ov.style.left, 10);
+              const top = parseInt(ov.style.top, 10);
+              const width = ov.offsetWidth;
+              const height = ov.offsetHeight;
+              return new Promise(resolve => {
+                if (img.complete) {
+                  ctx.drawImage(img, left, top, width, height);
+                  resolve();
+                } else {
+                  img.onload = () => {
+                    ctx.drawImage(img, left, top, width, height);
+                    resolve();
+                  };
+                  img.onerror = () => resolve(); // Skip on error
+                }
+              });
+            }
+          })
+        ).then(() => {
+          // Download the image
+          const link = document.createElement('a');
+          link.download = 'bandana-profile.png';
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+          alert('Your profile image has been downloaded!');
+        }).catch(err => {
+          console.error('Error saving profile image:', err);
+          alert('Failed to save profile image. Please try again.');
         });
-    </script>
+      });
+
+      // Copy contract address
+      window.copyContract = function() {
+        const addr = document.getElementById('contract-addr').innerText;
+        navigator.clipboard.writeText(addr).then(() => {
+          alert('Contract address copied to clipboard!');
+        }).catch(err => {
+          console.error('Failed to copy: ', err);
+        });
+      };
+    });
+  </script>
 </body>
 </html>
