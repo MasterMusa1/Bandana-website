@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bandana Memecoin</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto&family=Poppins&family=Montserrat&family=Arial&family=Times+New+Roman&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body, html { height: 100%; font-family: 'Orbitron', sans-serif; overflow: hidden; }
@@ -43,12 +43,12 @@
     }
 
     #home-header span:nth-child(1), #welcome-text span:nth-child(1) { color: #ff6f61; }
-    #home-header span:nth-child(2), #welcome-text span:nth-child(2) { color: #ff8a80; }
+    #home-header span:nth-child(2), #welcome-text span:nth-child(2) { color: #eee6e5; }
     #home-header span:nth-child(3), #welcome-text span:nth-child(3) { color: #fdd835; }
     #home-header span:nth-child(4), #welcome-text span:nth-child(4) { color: #64b5f6; }
     #home-header span:nth-child(5), #welcome-text span:nth-child(5) { color: #81c784; }
     #home-header span:nth-child(6), #welcome-text span:nth-child(6) { color: #ba68c8; }
-    #home-header span:nth-child(7), #welcome-text span:nth-child(7) { color: #e57373; }
+    #home-header span:nth-child(7), #welcome-text span:nth-child(7) { color: #6e4209ab; }
 
     @keyframes pulse {
       0%, 100% { transform: scale(1); opacity: 1; }
@@ -149,10 +149,34 @@
       text-align: center;
       opacity: 0;
       transition: opacity 0.5s ease 0.2s;
+      margin: 0;
+      width: 90%;
+      line-height: 1.2;
+      background: transparent;
+      z-index: 2;
     }
 
     .section.active h2 {
       opacity: 1;
+    }
+
+    @media (max-width: 600px) {
+      .section {
+        padding: 80px 10px 20px 10px;
+        font-size: 1rem;
+      }
+      .section h2 {
+        font-size: 1.3rem;
+        margin-top: 0;
+        margin-bottom: 30px;
+        position: static;
+        transform: none;
+        width: 100%;
+        left: 0;
+        top: 0;
+      }
+      .handle, .rotate-handle { width: 28px; height: 28px; }
+      .rotate-handle { top: -38px; }
     }
 
     a { color: #fff; text-decoration: underline; }
@@ -172,97 +196,104 @@
       box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
     }
 
-    #tokenomics .step-item:nth-child(1) { color: #ff6f61; }
-    #tokenomics .step-item:nth-child(2) { color: #fdd835; }
-    #tokenomics .step-item:nth-child(3) { color: #64b5f6; }
-    #tokenomics .step-item:nth-child(4) { color: #81c784; }
+    .hide-ui {
+      display: none !important;
+    }
 
-    #buy .step-item:nth-child(1) { color: #ff6f61; }
-    #buy .step-item:nth-child(2) { color: #fdd835; }
-    #buy .step-item:nth-child(3) { color: #64b5f6; }
+    /* Overlay handles and rotate handle */
+    .handle {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      border: 2px solid #ff6f61;
+      z-index: 2;
+    }
+    .handle.nw { top: -10px; left: -10px; cursor: nw-resize; }
+    .handle.n { top: -10px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
+    .handle.ne { top: -10px; right: -10px; cursor: ne-resize; }
+    .handle.w { left: -10px; top: 50%; transform: translateY(-50%); cursor: w-resize; }
+    .handle.e { right: -10px; top: 50%; transform: translateY(-50%); cursor: e-resize; }
+    .handle.sw { bottom: -10px; left: -10px; cursor: sw-resize; }
+    .handle.s { bottom: -10px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
+    .handle.se { bottom: -10px; right: -10px; cursor: se-resize; }
 
-    #why .step-item:nth-child(1) { color: #ff6f61; }
-    #why .step-item:nth-child(2) { color: #fdd835; }
-    #why .step-item:nth-child(3) { color: #64b5f6; }
-
-    #social .social-item {
+    .rotate-handle {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 28px;
+      height: 28px;
+      background: #fff;
+      border-radius: 50%;
+      border: 2px solid #ff6f61;
+      cursor: grab;
       display: flex;
       align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    .rotate-handle:after {
+      content: "⟳";
+      font-size: 18px;
+      color: #ff6f61;
+    }
+
+    .overlay, .text-overlay {
+      position: absolute;
+      cursor: move;
+      user-select: none;
+      box-sizing: border-box;
+    }
+    .selected {
+      outline: 2px solid #ff6f61;
+      z-index: 10 !important;
+    }
+    .text-overlay {
+      white-space: nowrap;
+      background: transparent;
+      padding: 0;
+      margin: 0;
+      min-width: 40px;
+      min-height: 30px;
+      pointer-events: auto;
+    }
+    .overlay img {
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      display: block;
+    }    .about-item {
       border: 2px solid #fff;
       border-radius: 8px;
       padding: 15px;
       margin: 15px 0;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      font-size: 1.1rem;
+      font-family: inherit;
+      background: rgba(0,0,0,0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
     }
-
-    #social .social-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
-    }
-
-    #social .social-item img {
-      width: 50px;
-      height: 50px;
+    .about-item.color1 { color: #ff6f61; border-color: #ff6f61; }
+    .about-item.color2 { color: #f1ebea; border-color: #eee5e4; }
+    .about-item.color3 { color: #fdd835; border-color: #fdd835; }
+    .about-item.color4 { color: #64b5f6; border-color: #64b5f6; }
+    .about-item.color5 { color: #81c784; border-color: #81c784; }
+    .about-item.color6 { color: #ba68c8; border-color: #ba68c8; }
+    .about-item.color7 { color: #ad5b0ec4; border-color: #915507ef; }    .social-logo {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
       margin-right: 15px;
+      vertical-align: middle;
     }
-
-    #social .social-item div {
-      flex: 1;
+    .social-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
     }
-
-    /* Editor Styles */
-    .editor { text-align: center; }
-    .editor input, .editor select, .editor button { margin: 10px; padding: 5px; }
-    #editor-container { margin: 20px auto; background: transparent; }
-    .overlay { position: absolute; border: 1px dashed #fff; cursor: move; }
-    .overlay img { width: 100%; height: 100%; pointer-events: none; }
-    .text-overlay { position: absolute; cursor: move; white-space: nowrap; }
-    .handle { position: absolute; width: 10px; height: 10px; background: #fff; border-radius: 50%; }
-    .handle.nw { top: -5px; left: -5px; cursor: nw-resize; }
-    .handle.n { top: -5px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
-    .handle.ne { top: -5px; right: -5px; cursor: ne-resize; }
-    .handle.w { left: -5px; top: 50%; transform: translateY(-50%); cursor: w-resize; }
-    .handle.e { right: -5px; top: 50%; transform: translateY(-50%); cursor: e-resize; }
-    .handle.sw { bottom: -5px; left: -5px; cursor: sw-resize; }
-    .handle.s { bottom: -5px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
-    .handle.se { bottom: -5px; right: -5px; cursor: se-resize; }
-    .selected { outline: 2px solid red; }
-
-    /* Token Info Styles */
-    #token-info .contract-address {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    #token-info .contract-address span {
-      cursor: pointer;
-      text-decoration: underline;
-    }
-
-    #token-info .step-item:nth-child(1) { color: #ff6f61; }
-    #token-info .step-item:nth-child(2) { color: #ff8a80; }
-    #token-info .step-item:nth-child(3) { color: #fdd835; }
-    #token-info .step-item:nth-child(4) { color: #64b5f6; }
-    #token-info .step-item:nth-child(5) { color: #81c784; }
-    #token-info .step-item:nth-child(6) { color: #ba68c8; }
-    #token-info .step-item:nth-child(7) { color: #e57373; }
-
-    @media (max-width: 600px) {
-  .section {
-    padding: 80px 10px 20px 10px;
-    font-size: 1rem;
-  }
-  .section h2 {
-    font-size: 1.3rem;
-    margin-top: 0;
-    margin-bottom: 30px;
-    position: static;
-    transform: none;
-    width: 100%;
-    left: 0;
-    top: 0;
-  }
-}
   </style>
 </head>
 <body>
@@ -296,88 +327,88 @@
     <a href="#" data-section="create">Create Your Bandana Profile</a>
   </div>
 
-  <div id="home" class="section"><h2>Welcome to Bandana</h2><p>Express your identity. Customize your profile. Join the movement.</p></div>
+  <div id="home" class="section"><h2>🏠 Welcome to Bandana</h2><p>Express your identity. Customize your profile. Join the movement.</p></div>
 
-  <div id="about" class="section">
-    <h2>🧮❔About Bandana</h2>
-    <p>🌟 <strong>Welcome to the $Bandana Cult</strong>: Dive into a world where bold style fuses with the lightning-fast power of Solana. Customize your bandana to reflect your unique identity and join a vibrant community of rebels and innovators.</p>
-    <p>🚀 <strong>Our Mission</strong>: To empower individuals to express their creed through customizable digital assets, fostering a movement of self-expression on the blockchain. Whether you're a crypto enthusiast or a style icon, $BANDANA lets you stand out in the digital realm.</p>
-    <p>💎 <strong>Why Bandana?</strong>: Inspired by the timeless symbol of rebellion, unity, and adventure, $BANDANA is more than a memecoin—it's a statement of identity. With zero transaction taxes, strategic liquidity burns, and full dedication of creator funds to marketing, we're engineered for explosive growth, community rewards, and long-term sustainability.</p>
-    <p>👥 <strong>Join the Movement</strong>: Become part of a growing cult that's redefining digital expression. Follow us on socials, create your personalized profile, and represent your creed today. Together, we're building a bolder, more connected future on Solana.</p>
-  </div>
-
-  <div id="token-info" class="section">
-    <h2>📑📊Contract and Token Info</h2>
-    <div class="contract-address">
-      <strong>Contract Address:</strong> <span id="contract-addr">J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh</span>
-      <button onclick="copyContract()">Copy</button>
+    <div id="about" class="section">
+    <h2>❔ About Bandana</h2>
+    <div class="about-item color1">
+      🌟 <strong>Welcome to the $Bandana Cult</strong>: Dive into a world where bold style fuses with the lightning-fast power of Solana. Customize your bandana to reflect your unique identity and join a vibrant community of rebels and innovators.
     </div>
-    <ul>
-      <li class="step-item">💲 <strong>Price:</strong> N/A</li>
-      <li class="step-item">📊 <strong>24h Volume:</strong> N/A</li>
-      <li class="step-item">🔢 <strong>Total Supply:</strong> 1 Billion</li>
-      <li class="step-item">🔄 <strong>Circulating Supply:</strong> N/A</li>
-      <li class="step-item">🛒 <strong>Market Cap:</strong> N/A</li>
-      <li class="step-item">👥 <strong>Holders:</strong> N/A</li>
-      <li class="step-item">📝 <strong>Transactions:</strong> N/A</li>
-    </ul>
+    <div class="about-item color2">
+      🚀 <strong>Our Mission</strong>: To empower individuals to express their creed through customizable digital assets, fostering a movement of self-expression on the blockchain. Whether you're a crypto enthusiast or a style icon, $BANDANA lets you stand out in the digital realm.
+    </div>
+    <div class="about-item color3">
+      💎 <strong>Why Bandana?</strong>: Inspired by the timeless symbol of rebellion, unity, and adventure, $BANDANA is more than a memecoin—it's a statement of identity. With zero transaction taxes, strategic liquidity burns, and full dedication of creator funds to marketing, we're engineered for explosive growth, community rewards, and long-term sustainability.
+    </div>
+    <div class="about-item color4">
+      👥 <strong>Join the Movement</strong>: Become part of a growing cult that's redefining digital expression. Follow us on socials, create your personalized profile, and represent your creed today. Together, we're building a bolder, more connected future on Solana.
+    </div>
   </div>
 
-  <div id="tokenomics" class="section">
+ <div id="token-info" class="section">
+  <h2>📜 Contract and Token Info</h2>
+  <div class="contract-address about-item color1">
+    <strong>Contract Address:</strong> <span id="contract-addr">J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh</span>
+    <button onclick="copyContract()">Copy</button>
+  </div>
+  <div class="about-item color2">💲 <strong>Price:</strong> N/A</div>
+  <div class="about-item color3">📊 <strong>24h Volume:</strong> N/A</div>
+  <div class="about-item color4">🔢 <strong>Total Supply:</strong> 1 Billion</div>
+  <div class="about-item color5">🔄 <strong>Circulating Supply:</strong> N/A</div>
+  <div class="about-item color6">🛒 <strong>Market Cap:</strong> N/A</div>
+  <div class="about-item color7">👥 <strong>Holders:</strong> N/A</div>
+  <div class="about-item color1">📝 <strong>Transactions:</strong> N/A</div>
+</div>
+
+    <div id="tokenomics" class="section">
     <h2>💰 Tokenomics</h2>
-    <ul>
-      <li class="step-item">📦 <strong>Total Supply:</strong> 1 Billion<br>We've minted a colossal 1 billion $BANDANA tokens, striking the perfect balance between abundance for community growth and scarcity to drive value sky-high in the crypto frontier.</li>
-      <li class="step-item">🚫 <strong>Tax:</strong> 0%<br>Zero taxes on transactions mean every trade is frictionless, keeping more coins in your pocket and letting the market flow freely like a wild west wind.</li>
-      <li class="step-item">🔥 <strong>Liquidity Burn:</strong> 1%<br>A slim 1% of liquidity is burned forever, tightening the supply over time and igniting potential price surges as we build a stronger, more resilient pool.</li>
-      <li class="step-item">📣 <strong>Marketing Funds:</strong> 100% of creator funds<br>All creator funds are dedicated to marketing mastery, fueling epic campaigns, partnerships, and hype to propel $BANDANA to legendary status in the memecoin realm.</li>
-    </ul>
+    <div class="about-item color1">📦 <strong>Total Supply:</strong> 1 Billion<br>We've minted a colossal 1 billion $BANDANA tokens, striking the perfect balance between abundance for community growth and scarcity to drive value sky-high in the crypto frontier.</div>
+    <div class="about-item color2">🚫 <strong>Tax:</strong> 0%<br>Zero taxes on transactions mean every trade is frictionless, keeping more coins in your pocket and letting the market flow freely like a wild west wind.</div>
+    <div class="about-item color3">🔥 <strong>Liquidity Burn:</strong> 1%<br>A slim 1% of liquidity is burned forever, tightening the supply over time and igniting potential price surges as we build a stronger, more resilient pool.</div>
+    <div class="about-item color4">📣 <strong>Marketing Funds:</strong> 100% of creator funds<br>All creator funds are dedicated to marketing mastery, fueling epic campaigns, partnerships, and hype to propel $BANDANA to legendary status in the memecoin realm.</div>
   </div>
 
-  <div id="buy" class="section">
-    <h2>🛒 How to Buy</h2>
-    <ol>
-      <li class="step-item">👻 <strong>Create a Wallet:</strong> Download Phantom wallet from <a href="https://phantom.app" target="_blank">phantom.app</a><br>Phantom is a secure, user-friendly wallet designed for the Solana blockchain. After downloading, follow the setup instructions to create your wallet, securely store your seed phrase, and get ready to hold $BANDANA.</li>
-      <li class="step-item">💸 <strong>Buy SOL:</strong> Get your hands on some SOL from your favorite exchange.<br>Purchase Solana (SOL) on centralized exchanges like Binance, Coinbase, or Kraken. Once bought, transfer the SOL to your Phantom wallet address for seamless decentralized trading.</li>
-      <li class="step-item">🔁 <strong>Swap:</strong> Use Raydium or Jupiter to trade your SOL for Bandana.<br>Connect your Phantom wallet to a Solana DEX like Raydium (raydium.io) or Jupiter (jup.ag). Paste the $BANDANA contract address (J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh), select the amount of SOL to swap, and confirm the transaction to join the cult.</li>
-    </ol>
-  </div>
+ <div id="buy" class="section">
+  <h2>🛒 How to Buy</h2>
+  <div class="about-item color1">🦊 <strong>Create a Wallet:</strong> Download Phantom wallet from <a href="https://phantom.app" target="_blank">phantom.app</a><br>Phantom is a secure, user-friendly wallet designed for the Solana blockchain. After downloading, follow the setup instructions to create your wallet, securely store your seed phrase, and get ready to hold $BANDANA.</div>
+  <div class="about-item color2">💸 <strong>Buy SOL:</strong> Get your hands on some SOL from your favorite exchange.<br>Purchase Solana (SOL) on centralized exchanges like Binance, Coinbase, or Kraken. Once bought, transfer the SOL to your Phantom wallet address for seamless decentralized trading.</div>
+  <div class="about-item color3">🔁 <strong>Swap:</strong> Use Raydium or Jupiter to trade your SOL for Bandana.<br>Connect your Phantom wallet to a Solana DEX like Raydium (raydium.io) or Jupiter (jup.ag). Paste the $BANDANA contract address (J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh), select the amount of SOL to swap, and confirm the transaction to join the cult.</div>
+</div>
 
-  <div id="why" class="section">
-    <h2>❓Why Buy</h2>
-    <div class="step-item">🎨 <strong>Custom profiles:</strong> Unleash your inner rebel by crafting a one-of-a-kind bandana avatar that showcases your unique style and creed in the digital world.</div>
-    <div class="step-item">👥 <strong>Community perks:</strong> Dive into an exclusive cult of bandana bearers, enjoying airdrops, VIP events, and collaborative adventures that make you part of something bigger.</div>
-    <div class="step-item">🗺️ <strong>Future roadmap:</strong> Buckle up for thrilling updates, including NFT drops, metaverse integrations, and utility expansions that will evolve $BANDANA into a powerhouse of innovation.</div>
-  </div>
+ <div id="why" class="section">
+  <h2>❓ Why Buy</h2>
+  <div class="about-item color1">🎨 <strong>Custom profiles:</strong> Unleash your inner rebel by crafting a one-of-a-kind bandana avatar that showcases your unique style and creed in the digital world.</div>
+  <div class="about-item color2">👥 <strong>Community perks:</strong> Dive into an exclusive cult of bandana bearers, enjoying airdrops, VIP events, and collaborative adventures that make you part of something bigger.</div>
+  <div class="about-item color3">🗺️ <strong>Future roadmap:</strong> Buckle up for thrilling updates, including NFT drops, metaverse integrations, and utility expansions that will evolve $BANDANA into a powerhouse of innovation.</div>
+</div>
 
-  <div id="social" class="section">
-    <h2>📢 Social Links</h2>
-    <p>Stay connected with the Bandana cult:</p>
-    <div class="social-item">
-      <img src="https://i.imgur.com/MX10kLM.png" alt="X Logo">
-      <div>
-        <a href="https://x.com/Bandana_sol" target="_blank">X (@Bandana_sol)</a>
-        <p>Join our X community with 68 followers. Follow for updates, memes, and discussions on $BANDANA.</p>
-      </div>
-    </div>
-    <div class="social-item">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/1024px-Telegram_logo.svg.png" alt="Telegram Logo">
-      <div>
-        <a href="https://t.me/bandana_sol" target="_blank">Telegram (@bandana_sol)</a>
-        <p>Join our Telegram channel with 69 members (6 online). The Bandana Cult on Solana – chat, share, and stay in the loop.</p>
-      </div>
+ <div id="social" class="section">
+  <h2>📢 Social Links</h2>
+  <div class="about-item color1 social-item">
+    <img class="social-logo" src="https://i.imgur.com/MX10kLM.png" alt="X Logo">
+    <div>
+      <a href="https://x.com/Bandana_sol" target="_blank">X (@Bandana_sol)</a>
+      <p>Join our X community with 68 followers. Follow for updates, memes, and discussions on $BANDANA.</p>
     </div>
   </div>
-
+  <div class="about-item color2 social-item">
+    <img class="social-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/1024px-Telegram_logo.svg.png" alt="Telegram Logo">
+    <div>
+      <a href="https://t.me/bandana_sol" target="_blank">Telegram (@bandana_sol)</a>
+      <p>Join our Telegram channel with 69 members (6 online). The Bandana Cult on Solana – chat, share, and stay in the loop.</p>
+    </div>
+  </div>
+</div>
   <div id="create" class="section">
-    <h2>👨‍🏫Create Your Bandana Profile</h2>
+    <h2>🎨 Create Your Bandana Profile</h2>
     <div class="editor">
-      <p>➕Upload your base image (e.g., your photo):</p>
+      <p>Upload your base image (e.g., your photo):</p>
       <input type="file" id="base-upload" accept="image/*">
-      <div id="editor-container" style="position: relative; width: 600px; height: 600px; border: 1px solid white; margin: 20px auto; overflow: hidden;">
+      <div id="editor-container" style="position: relative; width: 100%; max-width: 600px; height: 600px; border: 1px solid white; margin: 20px auto; overflow: hidden;">
         <img id="base-image" src="" style="width: 100%; height: 100%; object-fit: contain; display: none;">
       </div>
       <div>
-        <h3>➕Add Bandana Overlay</h3>
+        <h3>Add Bandana Overlay</h3>
         <select id="bandana-select">
           <option value="">Select Bandana</option>
           <option value="https://i.imgur.com/JjbEt47.png">Paisley design</option>
@@ -392,7 +423,7 @@
         <button id="add-bandana">Add</button>
       </div>
       <div>
-        <h3>➕Add Logo Overlay</h3>
+        <h3>Add Logo Overlay</h3>
         <select id="logo-select">
           <option value="">Select Logo</option>
           <option value="https://i.imgur.com/WBqPaQB.png">SOL</option>
@@ -403,7 +434,7 @@
         <button id="add-logo">Add</button>
       </div>
       <div>
-        <h3>➕Add Text</h3>
+        <h3>Add Text</h3>
         <input type="text" id="text-content" placeholder="Enter text">
         <select id="text-font">
           <option value="Orbitron">Orbitron</option>
@@ -417,8 +448,8 @@
         <input type="color" id="text-color" value="#ffffff">
         <button id="add-text">Add</button>
       </div>
-      <button id="delete-selected">❌Delete Selected</button>
-      <button id="save-profile">✅Save Profile Image</button>
+      <button id="delete-selected">Delete Selected</button>
+      <button id="save-profile">Save Profile Image</button>
     </div>
   </div>
 
@@ -428,7 +459,6 @@
       const menu = document.getElementById('menu');
       const homeHeader = document.getElementById('home-header');
       const welcomeText = document.getElementById('welcome-text');
-      const homeSection = document.getElementById('home');
 
       // Show header and welcome text only on home
       const updateHomeUI = () => {
@@ -495,6 +525,8 @@
 
       function createOverlay(src, isText = false, textOptions = {}) {
         const overlay = document.createElement('div');
+        overlay.style.transform = 'rotate(0deg)';
+        overlay.dataset.rotate = "0";
         if (isText) {
           overlay.classList.add('text-overlay');
           overlay.innerText = textOptions.content;
@@ -503,138 +535,163 @@
           overlay.style.color = textOptions.color;
           overlay.style.left = '50px';
           overlay.style.top = '50px';
+          overlay.style.width = 'auto';
+          overlay.style.height = 'auto';
         } else {
           overlay.classList.add('overlay');
           const img = document.createElement('img');
           img.src = src;
-          img.style.opacity = 0; // Prevent flash before load
-          img.onload = () => { img.style.opacity = 1; }; // Ensure image is loaded before display
+          img.style.opacity = 0;
+          img.onload = () => { img.style.opacity = 1; };
           overlay.appendChild(img);
           overlay.style.width = '200px';
           overlay.style.height = '200px';
           overlay.style.left = '50px';
           overlay.style.top = '50px';
 
-          // Add handles
+          // Add resize handles
           ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se'].forEach(dir => {
             const handle = document.createElement('div');
             handle.classList.add('handle', dir);
             overlay.appendChild(handle);
           });
         }
+        // Add rotate handle
+        const rotateHandle = document.createElement('div');
+        rotateHandle.className = 'rotate-handle';
+        overlay.appendChild(rotateHandle);
+
         editorContainer.appendChild(overlay);
         makeDraggable(overlay, isText);
-        if (!isText) makeResizable(overlay);
+        makeResizable(overlay);
+        makeRotatable(overlay, rotateHandle);
 
-        // Add selection on click
-        overlay.addEventListener('click', (e) => {
+        // Selection logic
+        overlay.addEventListener('mousedown', selectOverlay);
+        overlay.addEventListener('touchstart', selectOverlay, {passive:false});
+        function selectOverlay(e) {
           e.stopPropagation();
           document.querySelectorAll('.overlay, .text-overlay').forEach(o => o.classList.remove('selected'));
           overlay.classList.add('selected');
-        });
+        }
 
         return overlay;
       }
 
-      // ...existing code...
-
-function makeDraggable(element, isText) {
-  let isDragging = false;
-  let startX, startY, origX, origY;
-
-  function pointerDown(e) {
-    if (!isText && e.target.classList.contains('handle')) return;
-    isDragging = true;
-    const point = e.touches ? e.touches[0] : e;
-    startX = point.clientX;
-    startY = point.clientY;
-    origX = parseInt(element.style.left, 10) || 0;
-    origY = parseInt(element.style.top, 10) || 0;
-    e.preventDefault();
-  }
-
-  function pointerMove(e) {
-    if (!isDragging) return;
-    const point = e.touches ? e.touches[0] : e;
-    let dx = point.clientX - startX;
-    let dy = point.clientY - startY;
-    let newLeft = origX + dx;
-    let newTop = origY + dy;
-    // Constrain within editor bounds
-    newLeft = Math.max(0, Math.min(newLeft, editorContainer.offsetWidth - element.offsetWidth));
-    newTop = Math.max(0, Math.min(newTop, editorContainer.offsetHeight - element.offsetHeight));
-    element.style.left = `${newLeft}px`;
-    element.style.top = `${newTop}px`;
-  }
-
-  function pointerUp() {
-    isDragging = false;
-  }
-
-  element.addEventListener('mousedown', pointerDown);
-  element.addEventListener('touchstart', pointerDown, { passive: false });
-  document.addEventListener('mousemove', pointerMove);
-  document.addEventListener('touchmove', pointerMove, { passive: false });
-  document.addEventListener('mouseup', pointerUp);
-  document.addEventListener('touchend', pointerUp);
-}
-
-function makeResizable(element) {
-  const handles = element.querySelectorAll('.handle');
-  handles.forEach(handle => {
-    let isResizing = false;
-    let dir, startX, startY, startWidth, startHeight, startLeft, startTop;
-
-    function pointerDown(e) {
-      e.stopPropagation();
-      dir = handle.classList[1];
-      const point = e.touches ? e.touches[0] : e;
-      startX = point.clientX;
-      startY = point.clientY;
-      startWidth = parseInt(element.style.width, 10);
-      startHeight = parseInt(element.style.height, 10);
-      startLeft = parseInt(element.style.left, 10);
-      startTop = parseInt(element.style.top, 10);
-      isResizing = true;
-      e.preventDefault();
-    }
-
-    function pointerMove(e) {
-      if (!isResizing) return;
-      const point = e.touches ? e.touches[0] : e;
-      let dx = point.clientX - startX;
-      let dy = point.clientY - startY;
-      let minSize = window.innerWidth < 600 ? 40 : 20;
-
-      if (dir.includes('e')) {
-        element.style.width = `${Math.max(minSize, startWidth + dx)}px`;
-      } else if (dir.includes('w')) {
-        element.style.width = `${Math.max(minSize, startWidth - dx)}px`;
-        element.style.left = `${startLeft + dx}px`;
+      function makeDraggable(element, isText) {
+        let isDragging = false, startX, startY, origX, origY;
+        function pointerDown(e) {
+          if (!isText && (e.target.classList.contains('handle') || e.target.classList.contains('rotate-handle'))) return;
+          isDragging = true;
+          const point = e.touches ? e.touches[0] : e;
+          startX = point.clientX;
+          startY = point.clientY;
+          origX = parseInt(element.style.left, 10) || 0;
+          origY = parseInt(element.style.top, 10) || 0;
+          e.preventDefault();
+        }
+        function pointerMove(e) {
+          if (!isDragging) return;
+          const point = e.touches ? e.touches[0] : e;
+          let dx = point.clientX - startX;
+          let dy = point.clientY - startY;
+          let newLeft = origX + dx;
+          let newTop = origY + dy;
+          newLeft = Math.max(0, Math.min(newLeft, editorContainer.offsetWidth - element.offsetWidth));
+          newTop = Math.max(0, Math.min(newTop, editorContainer.offsetHeight - element.offsetHeight));
+          element.style.left = `${newLeft}px`;
+          element.style.top = `${newTop}px`;
+        }
+        function pointerUp() { isDragging = false; }
+        element.addEventListener('mousedown', pointerDown);
+        element.addEventListener('touchstart', pointerDown, { passive: false });
+        document.addEventListener('mousemove', pointerMove);
+        document.addEventListener('touchmove', pointerMove, { passive: false });
+        document.addEventListener('mouseup', pointerUp);
+        document.addEventListener('touchend', pointerUp);
       }
 
-      if (dir.includes('s')) {
-        element.style.height = `${Math.max(minSize, startHeight + dy)}px`;
-      } else if (dir.includes('n')) {
-        element.style.height = `${Math.max(minSize, startHeight - dy)}px`;
-        element.style.top = `${startTop + dy}px`;
+      function makeResizable(element) {
+        const handles = element.querySelectorAll('.handle');
+        handles.forEach(handle => {
+          let isResizing = false, dir, startX, startY, startWidth, startHeight, startLeft, startTop;
+          function pointerDown(e) {
+            e.stopPropagation();
+            dir = handle.classList[1];
+            const point = e.touches ? e.touches[0] : e;
+            startX = point.clientX;
+            startY = point.clientY;
+            startWidth = parseInt(element.style.width, 10);
+            startHeight = parseInt(element.style.height, 10);
+            startLeft = parseInt(element.style.left, 10);
+            startTop = parseInt(element.style.top, 10);
+            isResizing = true;
+            e.preventDefault();
+          }
+          function pointerMove(e) {
+            if (!isResizing) return;
+            const point = e.touches ? e.touches[0] : e;
+            let dx = point.clientX - startX;
+            let dy = point.clientY - startY;
+            let minSize = window.innerWidth < 600 ? 40 : 20;
+            if (dir.includes('e')) {
+              element.style.width = `${Math.max(minSize, startWidth + dx)}px`;
+            } else if (dir.includes('w')) {
+              element.style.width = `${Math.max(minSize, startWidth - dx)}px`;
+              element.style.left = `${startLeft + dx}px`;
+            }
+            if (dir.includes('s')) {
+              element.style.height = `${Math.max(minSize, startHeight + dy)}px`;
+            } else if (dir.includes('n')) {
+              element.style.height = `${Math.max(minSize, startHeight - dy)}px`;
+              element.style.top = `${startTop + dy}px`;
+            }
+          }
+          function pointerUp() { isResizing = false; }
+          handle.addEventListener('mousedown', pointerDown);
+          handle.addEventListener('touchstart', pointerDown, { passive: false });
+          document.addEventListener('mousemove', pointerMove);
+          document.addEventListener('touchmove', pointerMove, { passive: false });
+          document.addEventListener('mouseup', pointerUp);
+          document.addEventListener('touchend', pointerUp);
+        });
       }
-    }
 
-    function pointerUp() {
-      isResizing = false;
-    }
-
-    handle.addEventListener('mousedown', pointerDown);
-    handle.addEventListener('touchstart', pointerDown, { passive: false });
-    document.addEventListener('mousemove', pointerMove);
-    document.addEventListener('touchmove', pointerMove, { passive: false });
-    document.addEventListener('mouseup', pointerUp);
-    document.addEventListener('touchend', pointerUp);
-  });
-}
-
-// ...existing code...
+      function makeRotatable(element, rotateHandle) {
+        let isRotating = false, startAngle, startX, startY, centerX, centerY, origRotate;
+        function getAngle(cx, cy, ex, ey) {
+          return Math.atan2(ey - cy, ex - cx) * 180 / Math.PI;
+        }
+        function pointerDown(e) {
+          e.stopPropagation();
+          isRotating = true;
+          const rect = element.getBoundingClientRect();
+          centerX = rect.left + rect.width / 2 + window.scrollX;
+          centerY = rect.top + rect.height / 2 + window.scrollY;
+          const point = e.touches ? e.touches[0] : e;
+          startX = point.clientX;
+          startY = point.clientY;
+          origRotate = parseFloat(element.dataset.rotate) || 0;
+          startAngle = getAngle(centerX, centerY, startX, startY);
+          e.preventDefault();
+        }
+        function pointerMove(e) {
+          if (!isRotating) return;
+          const point = e.touches ? e.touches[0] : e;
+          let currentAngle = getAngle(centerX, centerY, point.clientX, point.clientY);
+          let delta = currentAngle - startAngle;
+          let newRotate = origRotate + delta;
+          element.style.transform = `rotate(${newRotate}deg)`;
+          element.dataset.rotate = newRotate;
+        }
+        function pointerUp() { isRotating = false; }
+        rotateHandle.addEventListener('mousedown', pointerDown);
+        rotateHandle.addEventListener('touchstart', pointerDown, { passive: false });
+        document.addEventListener('mousemove', pointerMove);
+        document.addEventListener('touchmove', pointerMove, { passive: false });
+        document.addEventListener('mouseup', pointerUp);
+        document.addEventListener('touchend', pointerUp);
+      }
 
       addBandanaBtn.addEventListener('click', () => {
         const src = bandanaSelect.value;
@@ -674,38 +731,63 @@ function makeResizable(element) {
           ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
         }
 
-        // Draw overlays in order
+        // Draw overlays in order, respecting rotation
         const overlays = editorContainer.querySelectorAll('.overlay, .text-overlay');
         Promise.all(
           Array.from(overlays).map(ov => {
+            const left = parseInt(ov.style.left, 10);
+            const top = parseInt(ov.style.top, 10);
+            const width = ov.offsetWidth;
+            const height = ov.offsetHeight;
+            const rotate = parseFloat(ov.dataset.rotate || "0") * Math.PI / 180;
+            const cx = left + width / 2;
+            const cy = top + height / 2;
             if (ov.classList.contains('text-overlay')) {
-              const left = parseInt(ov.style.left, 10);
-              const top = parseInt(ov.style.top, 10);
-              ctx.font = `${ov.style.fontSize} ${ov.style.fontFamily}`;
-              ctx.fillStyle = ov.style.color;
-              ctx.fillText(ov.innerText, left, top + parseInt(ov.style.fontSize, 10));
-              return Promise.resolve();
+              return new Promise(resolve => {
+                ctx.save();
+                ctx.translate(cx, cy);
+                ctx.rotate(rotate);
+                ctx.font = `${ov.style.fontSize} ${ov.style.fontFamily}`;
+                ctx.fillStyle = ov.style.color;
+                ctx.textBaseline = "top";
+                ctx.fillText(ov.innerText, -width / 2, -height / 2 + 10);
+                ctx.restore();
+                resolve();
+              });
             } else {
               const img = ov.querySelector('img');
-              const left = parseInt(ov.style.left, 10);
-              const top = parseInt(ov.style.top, 10);
-              const width = ov.offsetWidth;
-              const height = ov.offsetHeight;
               return new Promise(resolve => {
-                if (img.complete) {
-                  ctx.drawImage(img, left, top, width, height);
+                function drawImg() {
+                  ctx.save();
+                  ctx.translate(cx, cy);
+                  ctx.rotate(rotate);
+                  ctx.drawImage(img, -width / 2, -height / 2, width, height);
+                  ctx.restore();
                   resolve();
-                } else {
-                  img.onload = () => {
-                    ctx.drawImage(img, left, top, width, height);
-                    resolve();
-                  };
-                  img.onerror = () => resolve(); // Skip on error
                 }
+                if (img.complete) drawImg();
+                else img.onload = drawImg;
+                img.onerror = () => resolve();
               });
             }
           })
         ).then(() => {
+          // Draw watermark "bandana_sol" with colored letters
+          const text = "bandana_sol";
+          const colors = [
+            "#ff6f61", "#ff8a80", "#fdd835", "#64b5f6", "#81c784", "#ba68c8", "#e57373",
+            "#ff6f61", "#ff8a80", "#fdd835", "#64b5f6", "#81c784"
+          ];
+          ctx.save();
+          ctx.font = "bold 32px Orbitron, Arial, sans-serif";
+          let x = 20, y = canvas.height - 40;
+          for (let i = 0; i < text.length; i++) {
+            ctx.fillStyle = colors[i % colors.length];
+            ctx.fillText(text[i], x, y);
+            x += ctx.measureText(text[i]).width;
+          }
+          ctx.restore();
+
           // Download the image
           const link = document.createElement('a');
           link.download = 'bandana-profile.png';
