@@ -23,7 +23,9 @@
       transform: translateX(-50%);
       font-weight: bold;
       display: flex;
-      gap: 10px;
+      gap: 10px;      const img = document.createElement('img');
+      img.crossOrigin = "anonymous"; // Add this line!
+      img.src = src;
       z-index: 100;
       opacity: 1;
       transition: opacity 0.5s ease, transform 0.5s ease;
@@ -540,10 +542,11 @@
         } else {
           overlay.classList.add('overlay');
           const img = document.createElement('img');
-          img.src = src;
-          img.style.opacity = 0;
-          img.onload = () => { img.style.opacity = 1; };
-          overlay.appendChild(img);
+img.crossOrigin = "anonymous";
+img.src = src;
+img.style.opacity = 0;
+img.onload = () => { img.style.opacity = 1; };
+overlay.appendChild(img);
           overlay.style.width = '200px';
           overlay.style.height = '200px';
           overlay.style.left = '50px';
