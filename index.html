@@ -1492,7 +1492,6 @@
               ctx.save();
               ctx.translate(cx, cy);
               ctx.rotate(renderData.rotate);
-              // Apply bend effect using perspective
               ctx.transform(1, 0, Math.tan(renderData.bend), 1, 0, 0);
               const fontScale = (scaleX + scaleY) / 2;
               const fontSize = parseInt(ov.style.fontSize, 10) * fontScale;
@@ -1526,20 +1525,24 @@
             }
           });
 
+          // Draw watermark "bandana_sol" with colored letters in bottom-right
           const text = "bandana_sol";
           const colors = [
             "#ff6f61", "#ff8a80", "#fdd835", "#64b5f6", "#81c784", "#ba68c8", "#e57373",
-            "#ff6f61", "#ff8a80", "#fdd835", "#64b5f6", "#81c784"
+            "#ff6f61", "#ff8a80", "#fdd835", "#64b5f6"
           ];
           ctx.save();
           const watermarkScale = (scaleX + scaleY) / 2;
-          const watermarkSize = 32 * watermarkScale;
+          const watermarkSize = 28 * watermarkScale;
           ctx.font = `bold ${watermarkSize}px Orbitron, Arial, sans-serif`;
-          let x = 20 * scaleX, y = canvas.height - (40 * scaleY);
-          for (let i = 0; i < text.length; i++) {
+          ctx.textBaseline = "bottom";
+          ctx.textAlign = "right";
+          let x = canvas.width - (20 * scaleX);
+          let y = canvas.height - (10 * scaleY);
+          for (let i = text.length - 1; i >= 0; i--) {
             ctx.fillStyle = colors[i % colors.length];
             ctx.fillText(text[i], x, y);
-            x += ctx.measureText(text[i]).width;
+            x -= ctx.measureText(text[i]).width;
           }
           ctx.restore();
 
