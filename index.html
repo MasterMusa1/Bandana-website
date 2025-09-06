@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bandana Memecoin</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Graduate&family=Press+Start+2P&family=Russo+One&family=Staatliches&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body, html { height: 100%; font-family: 'Orbitron', sans-serif; overflow: hidden; }
@@ -23,9 +25,7 @@
       transform: translateX(-50%);
       font-weight: bold;
       display: flex;
-      gap: 10px;      const img = document.createElement('img');
-      img.crossOrigin = "anonymous"; // Add this line!
-      img.src = src;
+      gap: 10px;
       z-index: 100;
       opacity: 1;
       transition: opacity 0.5s ease, transform 0.5s ease;
@@ -37,8 +37,12 @@
       pointer-events: none;
     }
 
-    #home-header { top: 10%; font-size: 4rem; }
-    #welcome-text { bottom: 5%; font-size: 2.5rem; }
+    #home-header { 
+      top: 10%; 
+      font-size: 4rem; 
+      padding: 0 20px;
+    }
+    #welcome-text { bottom: 15%; font-size: 2.5rem; }
 
     #home-header span, #welcome-text span {
       animation: pulse 1.5s infinite;
@@ -55,6 +59,35 @@
     @keyframes pulse {
       0%, 100% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.2); opacity: 0.7; }
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      #home-header {
+        font-size: 3rem;
+        top: 8%;
+        transform: translateX(-50%) scale(0.9);
+        width: 100%;
+        justify-content: center;
+      }
+      
+      #welcome-text {
+        font-size: 2rem;
+        bottom: 12%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #home-header {
+        font-size: 2.5rem;
+        top: 7%;
+        transform: translateX(-50%) scale(0.85);
+      }
+      
+      #welcome-text {
+        font-size: 1.7rem;
+        bottom: 10%;
+      }
     }
 
     #burger {
@@ -99,7 +132,7 @@
       background: rgba(0,0,0,0.95);
       color: #fff;
       padding: 60px 20px;
-      transition: right 0.3s ease;
+      transition: right 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
       z-index: 99;
     }
 
@@ -112,6 +145,14 @@
       text-decoration: none;
       font-size: 1.2rem;
       transition: color 0.3s ease;
+      transform: translateX(20px);
+      opacity: 0;
+      transition: transform 0.4s ease, opacity 0.4s ease, color 0.3s ease;
+    }
+
+    #menu.open a {
+      transform: translateX(0);
+      opacity: 1;
     }
 
     #menu a:hover { color: #ff6f61; }
@@ -120,7 +161,7 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%) scale(0.95);
       width: 90vw;
       height: 90vh;
       background: rgba(0, 0, 0, 0.85);
@@ -132,13 +173,13 @@
       overflow-y: auto;
       box-shadow: 0 0 20px rgba(0,0,0,0.6);
       opacity: 0;
-      transition: opacity 0.5s ease, transform 0.5s ease;
+      transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     }
 
     .section.active {
       display: block;
       opacity: 1;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%) scale(1);
     }
 
     .section h2 {
@@ -177,8 +218,6 @@
         left: 0;
         top: 0;
       }
-      .handle, .rotate-handle { width: 28px; height: 28px; }
-      .rotate-handle { top: -38px; }
     }
 
     a { color: #fff; text-decoration: underline; }
@@ -202,32 +241,40 @@
       display: none !important;
     }
 
-    /* Overlay handles and rotate handle */
+    /* Overlay handles and rotate handle - Optimized for mobile */
     .handle {
       position: absolute;
-      width: 20px;
-      height: 20px;
+      width: 12px;
+      height: 12px;
       background: #fff;
       border-radius: 50%;
       border: 2px solid #ff6f61;
       z-index: 2;
     }
-    .handle.nw { top: -10px; left: -10px; cursor: nw-resize; }
-    .handle.n { top: -10px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
-    .handle.ne { top: -10px; right: -10px; cursor: ne-resize; }
-    .handle.w { left: -10px; top: 50%; transform: translateY(-50%); cursor: w-resize; }
-    .handle.e { right: -10px; top: 50%; transform: translateY(-50%); cursor: e-resize; }
-    .handle.sw { bottom: -10px; left: -10px; cursor: sw-resize; }
-    .handle.s { bottom: -10px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
-    .handle.se { bottom: -10px; right: -10px; cursor: se-resize; }
+    
+    @media (max-width: 768px) {
+      .handle {
+        width: 10px;
+        height: 10px;
+      }
+    }
+    
+    .handle.nw { top: -6px; left: -6px; cursor: nw-resize; }
+    .handle.n { top: -6px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
+    .handle.ne { top: -6px; right: -6px; cursor: ne-resize; }
+    .handle.w { left: -6px; top: 50%; transform: translateY(-50%); cursor: w-resize; }
+    .handle.e { right: -6px; top: 50%; transform: translateY(-50%); cursor: e-resize; }
+    .handle.sw { bottom: -6px; left: -6px; cursor: sw-resize; }
+    .handle.s { bottom: -6px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
+    .handle.se { bottom: -6px; right: -6px; cursor: se-resize; }
 
     .rotate-handle {
       position: absolute;
-      top: -30px;
+      top: -25px;
       left: 50%;
       transform: translateX(-50%);
-      width: 28px;
-      height: 28px;
+      width: 20px;
+      height: 20px;
       background: #fff;
       border-radius: 50%;
       border: 2px solid #ff6f61;
@@ -239,8 +286,48 @@
     }
     .rotate-handle:after {
       content: "⟳";
-      font-size: 18px;
+      font-size: 14px;
       color: #ff6f61;
+    }
+    
+    /* Flip handles */
+    .flip-handle {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      border: 2px solid #ff6f61;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    
+    .flip-handle.horizontal {
+      bottom: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .flip-handle.vertical {
+      top: 50%;
+      right: -25px;
+      transform: translateY(-50%);
+    }
+    
+    .flip-handle:after {
+      font-size: 14px;
+      color: #ff6f61;
+    }
+    
+    .flip-handle.horizontal:after {
+      content: "↔";
+    }
+    
+    .flip-handle.vertical:after {
+      content: "↕";
     }
 
     .overlay, .text-overlay {
@@ -267,7 +354,8 @@
       height: 100%;
       pointer-events: none;
       display: block;
-    }    .about-item {
+    }
+    .about-item {
       border: 2px solid #fff;
       border-radius: 8px;
       padding: 15px;
@@ -284,7 +372,8 @@
     .about-item.color4 { color: #64b5f6; border-color: #64b5f6; }
     .about-item.color5 { color: #81c784; border-color: #81c784; }
     .about-item.color6 { color: #ba68c8; border-color: #ba68c8; }
-    .about-item.color7 { color: #ad5b0ec4; border-color: #915507ef; }    .social-logo {
+    .about-item.color7 { color: #ad5b0ec4; border-color: #915507ef; }
+    .social-logo {
       width: 40px;
       height: 40px;
       object-fit: contain;
@@ -296,10 +385,315 @@
       align-items: flex-start;
       gap: 15px;
     }
+    
+    /* Editor Styles */
+    .editor {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    
+    .editor h3 {
+      color: #ff6f61;
+      margin: 15px 0 8px;
+      border-bottom: 2px solid #ff6f61;
+      padding-bottom: 5px;
+    }
+    
+    .editor input, .editor select, .editor button {
+      padding: 8px 12px;
+      margin: 5px;
+      border-radius: 5px;
+      border: 1px solid #444;
+      background: #222;
+      color: white;
+      font-family: inherit;
+    }
+    
+    .editor button {
+      background: #ff6f61;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .editor button:hover {
+      background: #ff8a80;
+    }
+    
+    /* Preview Modal */
+    .preview-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    
+    .preview-content {
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 90%;
+      max-height: 80%;
+      text-align: center;
+      position: relative;
+    }
+    
+    .preview-title {
+      color: #ff6f61;
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+    }
+    
+    .preview-image-container {
+      max-height: 60vh;
+      overflow: auto;
+      margin-bottom: 20px;
+    }
+    
+    .preview-content img {
+      max-width: 100%;
+      max-height: 100%;
+      border: 2px solid #ff6f61;
+      border-radius: 5px;
+    }
+    
+    .preview-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .preview-buttons button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    
+    #confirm-save {
+      background: #4CAF50;
+      color: white;
+    }
+    
+    #confirm-save:hover {
+      background: #45a049;
+    }
+    
+    #close-preview {
+      background: #f44336;
+      color: white;
+    }
+    
+    #close-preview:hover {
+      background: #da190b;
+    }
+    
+    #edit-again {
+      background: #2196F3;
+      color: white;
+    }
+    
+    #edit-again:hover {
+      background: #0b7dda;
+    }
+    
+    /* Footer */
+    #main-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 90;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+      border-top: 1px solid rgba(255, 111, 97, 0.3);
+    }
+    
+    .footer-social {
+      display: flex;
+      gap: 25px;
+      margin-bottom: 10px;
+    }
+    
+    .footer-social a {
+      color: #fff;
+      font-size: 28px;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 111, 97, 0.2);
+    }
+    
+    .footer-social a:hover {
+      color: #ff6f61;
+      transform: translateY(-3px);
+      background: rgba(255, 111, 97, 0.3);
+    }
+    
+    .footer-copyright {
+      font-size: 14px;
+      color: #aaa;
+      letter-spacing: 1px;
+    }
+    
+    /* Text controls */
+    .text-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0;
+      align-items: center;
+    }
+    
+    .text-controls input, .text-controls select {
+      flex: 1;
+      min-width: 120px;
+    }
+    
+    .text-controls input[type="color"] {
+      height: 40px;
+      padding: 2px;
+    }
+    
+    /* Font preview in dropdown */
+    select#text-font option {
+      font-size: 16px;
+      padding: 5px;
+    }
+    
+    select#text-font option[value="Graduate"] {
+      font-family: 'Graduate', cursive;
+    }
+    
+    select#text-font option[value="Press Start 2P"] {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 12px;
+    }
+    
+    select#text-font option[value="Russo One"] {
+      font-family: 'Russo One', sans-serif;
+    }
+    
+    select#text-font option[value="Staatliches"] {
+      font-family: 'Staatliches', cursive;
+    }
+    
+    select#text-font option[value="Orbitron"] {
+      font-family: 'Orbitron', sans-serif;
+    }
+    
+    /* Overlay category styling */
+    .overlay-category {
+      margin-bottom: 20px;
+      border: 1px solid #444;
+      border-radius: 8px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Loading indicator */
+    .loading {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 20px;
+      border-radius: 5px;
+      z-index: 1001;
+    }
+
+    /* Text overlay specific styles */
+    .text-overlay {
+      position: absolute;
+      cursor: move;
+      user-select: none;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: center center;
+    }
+
+    .text-overlay .text-content {
+      pointer-events: none;
+    }
+
+    /* Bend effect handle */
+    .bend-handle {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      border: 2px solid #ff6f61;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      top: -25px;
+      right: -25px;
+    }
+    
+    .bend-handle:after {
+      content: "↪";
+      font-size: 14px;
+      color: #ff6f61;
+    }
+
+    /* Multicolor text input styling */
+    .color-swatch {
+      width: 30px;
+      height: 30px;
+      border-radius: 5px;
+      margin: 5px;
+      cursor: pointer;
+      border: 1px solid #444;
+    }
+
+    .color-swatch.selected {
+      border: 2px solid #ff6f61;
+    }
+
+    /* Dynamic font preview */
+    #font-preview {
+      margin-top: 10px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 5px;
+      min-height: 30px;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
-
   <video id="bg-video" autoplay muted loop>
     <source src="https://i.imgur.com/O2ShkYu.mp4" type="video/mp4" />
   </video>
@@ -331,7 +725,7 @@
 
   <div id="home" class="section"><h2>🏠 Welcome to Bandana</h2><p>Express your identity. Customize your profile. Join the movement.</p></div>
 
-    <div id="about" class="section">
+  <div id="about" class="section">
     <h2>❔ About Bandana</h2>
     <div class="about-item color1">
       🌟 <strong>Welcome to the $Bandana Cult</strong>: Dive into a world where bold style fuses with the lightning-fast power of Solana. Customize your bandana to reflect your unique identity and join a vibrant community of rebels and innovators.
@@ -347,22 +741,22 @@
     </div>
   </div>
 
- <div id="token-info" class="section">
-  <h2>📜 Contract and Token Info</h2>
-  <div class="contract-address about-item color1">
-    <strong>Contract Address:</strong> <span id="contract-addr">J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh</span>
-    <button onclick="copyContract()">Copy</button>
+  <div id="token-info" class="section">
+    <h2>📜 Contract and Token Info</h2>
+    <div class="contract-address about-item color1">
+      <strong>Contract Address:</strong> <span id="contract-addr">J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh</span>
+      <button onclick="copyContract()">Copy</button>
+    </div>
+    <div class="about-item color2">💲 <strong>Price:</strong> N/A</div>
+    <div class="about-item color3">📊 <strong>24h Volume:</strong> N/A</div>
+    <div class="about-item color4">🔢 <strong>Total Supply:</strong> 1 Billion</div>
+    <div class="about-item color5">🔄 <strong>Circulating Supply:</strong> N/A</div>
+    <div class="about-item color6">🛒 <strong>Market Cap:</strong> N/A</div>
+    <div class="about-item color7">👥 <strong>Holders:</strong> N/A</div>
+    <div class="about-item color1">📝 <strong>Transactions:</strong> N/A</div>
   </div>
-  <div class="about-item color2">💲 <strong>Price:</strong> N/A</div>
-  <div class="about-item color3">📊 <strong>24h Volume:</strong> N/A</div>
-  <div class="about-item color4">🔢 <strong>Total Supply:</strong> 1 Billion</div>
-  <div class="about-item color5">🔄 <strong>Circulating Supply:</strong> N/A</div>
-  <div class="about-item color6">🛒 <strong>Market Cap:</strong> N/A</div>
-  <div class="about-item color7">👥 <strong>Holders:</strong> N/A</div>
-  <div class="about-item color1">📝 <strong>Transactions:</strong> N/A</div>
-</div>
 
-    <div id="tokenomics" class="section">
+  <div id="tokenomics" class="section">
     <h2>💰 Tokenomics</h2>
     <div class="about-item color1">📦 <strong>Total Supply:</strong> 1 Billion<br>We've minted a colossal 1 billion $BANDANA tokens, striking the perfect balance between abundance for community growth and scarcity to drive value sky-high in the crypto frontier.</div>
     <div class="about-item color2">🚫 <strong>Tax:</strong> 0%<br>Zero taxes on transactions mean every trade is frictionless, keeping more coins in your pocket and letting the market flow freely like a wild west wind.</div>
@@ -370,37 +764,38 @@
     <div class="about-item color4">📣 <strong>Marketing Funds:</strong> 100% of creator funds<br>All creator funds are dedicated to marketing mastery, fueling epic campaigns, partnerships, and hype to propel $BANDANA to legendary status in the memecoin realm.</div>
   </div>
 
- <div id="buy" class="section">
-  <h2>🛒 How to Buy</h2>
-  <div class="about-item color1">🦊 <strong>Create a Wallet:</strong> Download Phantom wallet from <a href="https://phantom.app" target="_blank">phantom.app</a><br>Phantom is a secure, user-friendly wallet designed for the Solana blockchain. After downloading, follow the setup instructions to create your wallet, securely store your seed phrase, and get ready to hold $BANDANA.</div>
-  <div class="about-item color2">💸 <strong>Buy SOL:</strong> Get your hands on some SOL from your favorite exchange.<br>Purchase Solana (SOL) on centralized exchanges like Binance, Coinbase, or Kraken. Once bought, transfer the SOL to your Phantom wallet address for seamless decentralized trading.</div>
-  <div class="about-item color3">🔁 <strong>Swap:</strong> Use Raydium or Jupiter to trade your SOL for Bandana.<br>Connect your Phantom wallet to a Solana DEX like Raydium (raydium.io) or Jupiter (jup.ag). Paste the $BANDANA contract address (J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh), select the amount of SOL to swap, and confirm the transaction to join the cult.</div>
-</div>
+  <div id="buy" class="section">
+    <h2>🛒 How to Buy</h2>
+    <div class="about-item color1">👻 <strong>Create a Wallet:</strong> Download Phantom wallet from <a href="https://phantom.app" target="_blank">phantom.app</a><br>Phantom is a secure, user-friendly wallet designed for the Solana blockchain. After downloading, follow the setup instructions to create your wallet, securely store your seed phrase, and get ready to hold $BANDANA.</div>
+    <div class="about-item color2">💸 <strong>Buy SOL:</strong> Get your hands on some SOL from your favorite exchange.<br>Purchase Solana (SOL) on centralized exchanges like Binance, Coinbase, or Kraken. Once bought, transfer the SOL to your Phantom wallet address for seamless decentralized trading.</div>
+    <div class="about-item color3">🔁 <strong>Swap:</strong> Use Raydium or Jupiter to trade your SOL for Bandana.<br>Connect your Phantom wallet to a Solana DEX like Raydium (raydium.io) or Jupiter (jup.ag). Paste the $BANDANA contract address (J6XEeaVX6UMBu5QDP1xar7LVE7RYx8iCodEWTTnSYXxh), select the amount of SOL to swap, and confirm the transaction to join the cult.</div>
+  </div>
 
- <div id="why" class="section">
-  <h2>❓ Why Buy</h2>
-  <div class="about-item color1">🎨 <strong>Custom profiles:</strong> Unleash your inner rebel by crafting a one-of-a-kind bandana avatar that showcases your unique style and creed in the digital world.</div>
-  <div class="about-item color2">👥 <strong>Community perks:</strong> Dive into an exclusive cult of bandana bearers, enjoying airdrops, VIP events, and collaborative adventures that make you part of something bigger.</div>
-  <div class="about-item color3">🗺️ <strong>Future roadmap:</strong> Buckle up for thrilling updates, including NFT drops, metaverse integrations, and utility expansions that will evolve $BANDANA into a powerhouse of innovation.</div>
-</div>
+  <div id="why" class="section">
+    <h2>❓ Why Buy</h2>
+    <div class="about-item color1">🎨 <strong>Custom profiles:</strong> Unleash your inner rebel by crafting a one-of-a-kind bandana avatar that showcases your unique style and creed in the digital world.</div>
+    <div class="about-item color2">👥 <strong>Community perks:</strong> Dive into an exclusive cult of bandana bearers, enjoying airdrops, VIP events, and collaborative adventures that make you part of something bigger.</div>
+    <div class="about-item color3">🗺️ <strong>Future roadmap:</strong> Buckle up for thrilling updates, including NFT drops, metaverse integrations, and utility expansions that will evolve $BANDANA into a powerhouse of innovation.</div>
+  </div>
 
- <div id="social" class="section">
-  <h2>📢 Social Links</h2>
-  <div class="about-item color1 social-item">
-    <img class="social-logo" src="https://i.imgur.com/MX10kLM.png" alt="X Logo">
-    <div>
-      <a href="https://x.com/Bandana_sol" target="_blank">X (@Bandana_sol)</a>
-      <p>Join our X community with 68 followers. Follow for updates, memes, and discussions on $BANDANA.</p>
+  <div id="social" class="section">
+    <h2>📢 Social Links</h2>
+    <div class="about-item color1 social-item">
+      <img class="social-logo" src="https://i.imgur.com/MX10kLM.png" alt="X Logo">
+      <div>
+        <a href="https://x.com/Bandana_sol" target="_blank">X (@Bandana_sol)</a>
+        <p>Join our X community with 68 followers. Follow for updates, memes, and discussions on $BANDANA.</p>
+      </div>
+    </div>
+    <div class="about-item color2 social-item">
+      <img class="social-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/1024px-Telegram_logo.svg.png" alt="Telegram Logo">
+      <div>
+        <a href="https://t.me/bandana_sol" target="_blank">Telegram (@bandana_sol)</a>
+        <p>Join our Telegram channel with 69 members (6 online). The Bandana Cult on Solana – chat, share, and stay in the loop.</p>
+      </div>
     </div>
   </div>
-  <div class="about-item color2 social-item">
-    <img class="social-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/1024px-Telegram_logo.svg.png" alt="Telegram Logo">
-    <div>
-      <a href="https://t.me/bandana_sol" target="_blank">Telegram (@bandana_sol)</a>
-      <p>Join our Telegram channel with 69 members (6 online). The Bandana Cult on Solana – chat, share, and stay in the loop.</p>
-    </div>
-  </div>
-</div>
+
   <div id="create" class="section">
     <h2>🎨 Create Your Bandana Profile</h2>
     <div class="editor">
@@ -409,10 +804,11 @@
       <div id="editor-container" style="position: relative; width: 100%; max-width: 600px; height: 600px; border: 1px solid white; margin: 20px auto; overflow: hidden;">
         <img id="base-image" src="" style="width: 100%; height: 100%; object-fit: contain; display: none;">
       </div>
-      <div>
-        <h3>Add Bandana Overlay</h3>
+      
+      <div class="overlay-category">
+        <h3>Bandana Styles</h3>
         <select id="bandana-select">
-          <option value="">Select Bandana</option>
+          <option value="">Select Bandana Style</option>
           <option value="https://i.imgur.com/JjbEt47.png">Paisley design</option>
           <option value="https://i.imgur.com/hbpJtdo.png">USA design</option>
           <option value="https://i.imgur.com/1P7nden.png">Bandana with hair</option>
@@ -421,56 +817,138 @@
           <option value="https://i.imgur.com/2IA7MMP.png">Paisley design ft sol</option>
           <option value="https://i.imgur.com/rT1olJI.png">Tech design</option>
           <option value="https://i.imgur.com/McFB24z.png">B&W paisley</option>
+          <option value="https://imgur.com/DH5dVnc">Tupac Style - Black</option>
+          <option value="https://imgur.com/Lms4MKZ">Tupac Style - White</option>
         </select>
-        <button id="add-bandana">Add</button>
+        <button id="add-bandana">Add Bandana</button>
       </div>
-      <div>
-        <h3>Add Logo Overlay</h3>
+      
+      <div class="overlay-category">
+        <h3>Logo Add-ons</h3>
         <select id="logo-select">
           <option value="">Select Logo</option>
           <option value="https://i.imgur.com/WBqPaQB.png">SOL</option>
           <option value="https://i.imgur.com/MX10kLM.png">X</option>
           <option value="https://i.imgur.com/ww2FqF2.png">USA</option>
           <option value="https://i.imgur.com/JsRg8u3.png">GROK</option>
+          <option value="https://imgur.com/JNeuZlk">Pump</option>
+          <option value="https://imgur.com/H5IN3jt">Sol 2</option>
         </select>
-        <button id="add-logo">Add</button>
+        <button id="add-logo">Add Logo</button>
       </div>
-      <div>
+      
+      <div class="overlay-category">
         <h3>Add Text</h3>
-        <input type="text" id="text-content" placeholder="Enter text">
-        <select id="text-font">
-          <option value="Orbitron">Orbitron</option>
-          <option value="Roboto">Roboto</option>
-          <option value="Poppins">Poppins</option>
-          <option value="Montserrat">Montserrat</option>
-          <option value="Arial">Arial</option>
-          <option value="Times New Roman">Times New Roman</option>
-        </select>
-        <input type="number" id="text-size" value="20" min="10" max="100"> px
-        <input type="color" id="text-color" value="#ffffff">
-        <button id="add-text">Add</button>
+        <div class="text-controls">
+          <input type="text" id="text-content" placeholder="Enter text" oninput="updateFontPreview()">
+          <select id="text-font" onchange="updateFontPreview()">
+            <option value="Orbitron">Orbitron (Default)</option>
+            <option value="Arial">Arial</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Graduate">Graduate (Graffiti)</option>
+            <option value="Press Start 2P">Press Start 2P (Cyberpunk)</option>
+            <option value="Russo One">Russo One (Bold)</option>
+            <option value="Staatliches">Staatliches (Stylized)</option>
+          </select>
+          <div id="color-swatches" style="display: flex; flex-wrap: wrap; gap: 5px;">
+            <!-- Color swatches will be dynamically added here -->
+          </div>
+        </div>
+        <div id="font-preview">Type to see font preview</div>
+        <button id="add-text">Add Text</button>
       </div>
+      
       <button id="delete-selected">Delete Selected</button>
+      <button id="preview-profile">Preview</button>
       <button id="save-profile">Save Profile Image</button>
     </div>
   </div>
 
+  <!-- Preview Modal -->
+  <div id="preview-modal" class="preview-modal">
+    <div class="preview-content">
+      <div class="preview-title">Preview Your Bandana Profile</div>
+      <div class="preview-image-container">
+        <img id="preview-image" src="" alt="Preview">
+      </div>
+      <div class="preview-buttons">
+        <button id="close-preview">Close</button>
+        <button id="edit-again">Edit Again</button>
+        <button id="confirm-save">Save Image</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div id="loading" class="loading">
+    <i class="fas fa-spinner fa-spin"></i> Processing your image...
+  </div>
+
+  <!-- Footer -->
+  <footer id="main-footer">
+    <div class="footer-social">
+      <a href="https://t.me/bandana_sol" target="_blank" title="Telegram">
+        <i class="fab fa-telegram-plane"></i>
+      </a>
+      <a href="https://x.com/Bandana_sol" target="_blank" title="X Platform">
+        <i class="fab fa-x"></i>
+      </a>
+    </div>
+    <div class="footer-copyright">
+      Bandana Site © All rights reserved 2025
+    </div>
+  </footer>
+
   <script>
+    // Global state management
+    const editorState = {
+      overlays: [],
+      stateChecksum: null,
+      isRendering: false
+    };
+
+    // Generate a simple checksum for state validation
+    function generateChecksum() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    // Update state checksum whenever edits are made
+    function updateStateChecksum() {
+      editorState.stateChecksum = generateChecksum();
+    }
+
+    // Initialize color swatches
+    const defaultColors = [
+      '#ffffff', '#ff6f61', '#fdd835', '#64b5f6', '#81c784', '#ba68c8',
+      '#e57373', '#ff8a80', '#4caf50', '#2196f3'
+    ];
+
     document.addEventListener('DOMContentLoaded', () => {
       const burger = document.getElementById('burger');
       const menu = document.getElementById('menu');
       const homeHeader = document.getElementById('home-header');
       const welcomeText = document.getElementById('welcome-text');
+      const loadingIndicator = document.getElementById('loading');
 
       // Show header and welcome text only on home
       const updateHomeUI = () => {
         const isHome = !menu.classList.contains('open') && !document.querySelector('.section.active');
         homeHeader.classList.toggle('hide-ui', !isHome);
         welcomeText.classList.toggle('hide-ui', !isHome);
+        document.getElementById('main-footer').style.display = isHome ? 'flex' : 'none';
       };
 
       // Initial state
       updateHomeUI();
+
+      // Add animation to menu items with staggered delay
+      const menuItems = document.querySelectorAll('#menu a');
+      menuItems.forEach((item, index) => {
+        item.style.transitionDelay = `${index * 0.1}s`;
+      });
 
       burger.addEventListener('click', () => {
         burger.classList.toggle('open');
@@ -483,21 +961,38 @@
         link.addEventListener('click', (e) => {
           e.preventDefault();
           const sectionId = link.dataset.section;
-          document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-          document.getElementById(sectionId).classList.add('active');
-          menu.classList.remove('open');
-          burger.classList.remove('open');
-          updateHomeUI();
+          
+          // Animate out current section
+          const currentSection = document.querySelector('.section.active');
+          if (currentSection) {
+            currentSection.classList.remove('active');
+          }
+          
+          // Animate in new section
+          setTimeout(() => {
+            document.getElementById(sectionId).classList.add('active');
+            menu.classList.remove('open');
+            burger.classList.remove('open');
+            updateHomeUI();
+          }, 300);
         });
       });
 
       const homeLink = document.getElementById('home-link');
       homeLink.addEventListener('click', (e) => {
         e.preventDefault();
-        document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-        menu.classList.remove('open');
-        burger.classList.remove('open');
-        updateHomeUI();
+        
+        // Animate out current section
+        const currentSection = document.querySelector('.section.active');
+        if (currentSection) {
+          currentSection.classList.remove('active');
+        }
+        
+        setTimeout(() => {
+          menu.classList.remove('open');
+          burger.classList.remove('open');
+          updateHomeUI();
+        }, 300);
       });
 
       // Profile Editor Functionality
@@ -511,10 +1006,53 @@
       const addTextBtn = document.getElementById('add-text');
       const textContent = document.getElementById('text-content');
       const textFont = document.getElementById('text-font');
-      const textSize = document.getElementById('text-size');
-      const textColor = document.getElementById('text-color');
+      const colorSwatches = document.getElementById('color-swatches');
+      const fontPreview = document.getElementById('font-preview');
       const deleteBtn = document.getElementById('delete-selected');
+      const previewBtn = document.getElementById('preview-profile');
       const saveBtn = document.getElementById('save-profile');
+      const previewModal = document.getElementById('preview-modal');
+      const previewImage = document.getElementById('preview-image');
+      const closePreview = document.getElementById('close-preview');
+      const confirmSave = document.getElementById('confirm-save');
+      const editAgain = document.getElementById('edit-again');
+
+      // Initialize color swatches
+      let selectedColors = [];
+      defaultColors.forEach(color => {
+        const swatch = document.createElement('div');
+        swatch.className = 'color-swatch';
+        swatch.style.backgroundColor = color;
+        swatch.dataset.color = color;
+        swatch.addEventListener('click', () => {
+          if (selectedColors.includes(color)) {
+            selectedColors = selectedColors.filter(c => c !== color);
+            swatch.classList.remove('selected');
+          } else {
+            selectedColors.push(color);
+            swatch.classList.add('selected');
+          }
+        });
+        colorSwatches.appendChild(swatch);
+      });
+
+      // Dynamic font preview
+      window.updateFontPreview = function() {
+        const text = textContent.value || 'Type to see font preview';
+        const font = textFont.value;
+        fontPreview.style.fontFamily = font;
+        if (selectedColors.length > 0) {
+          let coloredText = '';
+          for (let i = 0; i < text.length; i++) {
+            const color = selectedColors[i % selectedColors.length];
+            coloredText += `<span style="color: ${color}">${text[i]}</span>`;
+          }
+          fontPreview.innerHTML = coloredText;
+        } else {
+          fontPreview.innerHTML = text;
+          fontPreview.style.color = '#ffffff';
+        }
+      };
 
       baseUpload.addEventListener('change', (e) => {
         const file = e.target.files[0];
@@ -522,6 +1060,7 @@
           const url = URL.createObjectURL(file);
           baseImage.src = url;
           baseImage.style.display = 'block';
+          updateStateChecksum();
         }
       });
 
@@ -529,26 +1068,64 @@
         const overlay = document.createElement('div');
         overlay.style.transform = 'rotate(0deg)';
         overlay.dataset.rotate = "0";
+        overlay.dataset.flipH = "1";
+        overlay.dataset.flipV = "1";
+        overlay.dataset.bend = "0";
+        overlay.dataset.checksum = generateChecksum();
+        
         if (isText) {
           overlay.classList.add('text-overlay');
-          overlay.innerText = textOptions.content;
+          const textContentDiv = document.createElement('div');
+          textContentDiv.className = 'text-content';
+          if (textOptions.colors && textOptions.colors.length > 0) {
+            let coloredText = '';
+            for (let i = 0; i < textOptions.content.length; i++) {
+              const color = textOptions.colors[i % textOptions.colors.length];
+              coloredText += `<span style="color: ${color}">${textOptions.content[i]}</span>`;
+            }
+            textContentDiv.innerHTML = coloredText;
+          } else {
+            textContentDiv.innerText = textOptions.content;
+            textContentDiv.style.color = textOptions.color || '#ffffff';
+          }
+          overlay.appendChild(textContentDiv);
           overlay.style.fontFamily = textOptions.font;
-          overlay.style.fontSize = `${textOptions.size}px`;
-          overlay.style.color = textOptions.color;
+          overlay.style.fontSize = `24px`;
           overlay.style.left = '50px';
           overlay.style.top = '50px';
           overlay.style.width = 'auto';
           overlay.style.height = 'auto';
+
+          // Add resize handles for text
+          ['nw', 'ne', 'sw', 'se'].forEach(dir => {
+            const handle = document.createElement('div');
+            handle.classList.add('handle', dir);
+            overlay.appendChild(handle);
+          });
+
+          // Add bend handle for text
+          const bendHandle = document.createElement('div');
+          bendHandle.className = 'bend-handle';
+          overlay.appendChild(bendHandle);
         } else {
           overlay.classList.add('overlay');
           const img = document.createElement('img');
-img.crossOrigin = "anonymous";
-img.src = src;
-img.style.opacity = 0;
-img.onload = () => { img.style.opacity = 1; };
-overlay.appendChild(img);
-          overlay.style.width = '200px';
-          overlay.style.height = '200px';
+          img.crossOrigin = "anonymous";
+          img.src = src;
+          img.style.opacity = 0;
+          img.onload = () => { 
+            img.style.opacity = 1; 
+            const aspectRatio = img.naturalWidth / img.naturalHeight;
+            if (aspectRatio > 1) {
+              overlay.style.width = '200px';
+              overlay.style.height = (200 / aspectRatio) + 'px';
+            } else {
+              overlay.style.height = '200px';
+              overlay.style.width = (200 * aspectRatio) + 'px';
+            }
+            updateStateChecksum();
+          };
+          overlay.appendChild(img);
           overlay.style.left = '50px';
           overlay.style.top = '50px';
 
@@ -559,32 +1136,68 @@ overlay.appendChild(img);
             overlay.appendChild(handle);
           });
         }
+
         // Add rotate handle
         const rotateHandle = document.createElement('div');
         rotateHandle.className = 'rotate-handle';
         overlay.appendChild(rotateHandle);
+        
+        // Add flip handles for non-text elements
+        if (!isText) {
+          const flipHandleH = document.createElement('div');
+          flipHandleH.className = 'flip-handle horizontal';
+          flipHandleH.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const currentFlip = parseInt(overlay.dataset.flipH);
+            overlay.dataset.flipH = -currentFlip;
+            overlay.style.transform = `rotate(${overlay.dataset.rotate}deg) scale(${overlay.dataset.flipH}, ${overlay.dataset.flipV}) perspective(1000px) rotateY(${overlay.dataset.bend}deg)`;
+            updateStateChecksum();
+          });
+          overlay.appendChild(flipHandleH);
+          
+          const flipHandleV = document.createElement('div');
+          flipHandleV.className = 'flip-handle vertical';
+          flipHandleV.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const currentFlip = parseInt(overlay.dataset.flipV);
+            overlay.dataset.flipV = -currentFlip;
+            overlay.style.transform = `rotate(${overlay.dataset.rotate}deg) scale(${overlay.dataset.flipH}, ${overlay.dataset.flipV}) perspective(1000px) rotateY(${overlay.dataset.bend}deg)`;
+            updateStateChecksum();
+          });
+          overlay.appendChild(flipHandleV);
+        }
 
         editorContainer.appendChild(overlay);
         makeDraggable(overlay, isText);
-        makeResizable(overlay);
+        makeResizable(overlay, isText);
         makeRotatable(overlay, rotateHandle);
+        if (isText) {
+          makeBendable(overlay);
+        }
 
         // Selection logic
         overlay.addEventListener('mousedown', selectOverlay);
-        overlay.addEventListener('touchstart', selectOverlay, {passive:false});
+        overlay.addEventListener('touchstart', selectOverlay, {passive: false});
         function selectOverlay(e) {
           e.stopPropagation();
           document.querySelectorAll('.overlay, .text-overlay').forEach(o => o.classList.remove('selected'));
           overlay.classList.add('selected');
         }
 
+        // Track this overlay in our state
+        editorState.overlays.push({
+          element: overlay,
+          checksum: overlay.dataset.checksum
+        });
+        
+        updateStateChecksum();
         return overlay;
       }
 
       function makeDraggable(element, isText) {
         let isDragging = false, startX, startY, origX, origY;
         function pointerDown(e) {
-          if (!isText && (e.target.classList.contains('handle') || e.target.classList.contains('rotate-handle'))) return;
+          if (e.target.classList.contains('handle') || e.target.classList.contains('rotate-handle') || e.target.classList.contains('flip-handle') || e.target.classList.contains('bend-handle')) return;
           isDragging = true;
           const point = e.touches ? e.touches[0] : e;
           startX = point.clientX;
@@ -605,7 +1218,10 @@ overlay.appendChild(img);
           element.style.left = `${newLeft}px`;
           element.style.top = `${newTop}px`;
         }
-        function pointerUp() { isDragging = false; }
+        function pointerUp() { 
+          isDragging = false; 
+          updateStateChecksum();
+        }
         element.addEventListener('mousedown', pointerDown);
         element.addEventListener('touchstart', pointerDown, { passive: false });
         document.addEventListener('mousemove', pointerMove);
@@ -614,7 +1230,7 @@ overlay.appendChild(img);
         document.addEventListener('touchend', pointerUp);
       }
 
-      function makeResizable(element) {
+      function makeResizable(element, isText) {
         const handles = element.querySelectorAll('.handle');
         handles.forEach(handle => {
           let isResizing = false, dir, startX, startY, startWidth, startHeight, startLeft, startTop;
@@ -624,10 +1240,10 @@ overlay.appendChild(img);
             const point = e.touches ? e.touches[0] : e;
             startX = point.clientX;
             startY = point.clientY;
-            startWidth = parseInt(element.style.width, 10);
-            startHeight = parseInt(element.style.height, 10);
-            startLeft = parseInt(element.style.left, 10);
-            startTop = parseInt(element.style.top, 10);
+            startWidth = parseInt(element.style.width, 10) || element.offsetWidth;
+            startHeight = parseInt(element.style.height, 10) || element.offsetHeight;
+            startLeft = parseInt(element.style.left, 10) || 0;
+            startTop = parseInt(element.style.top, 10) || 0;
             isResizing = true;
             e.preventDefault();
           }
@@ -637,20 +1253,31 @@ overlay.appendChild(img);
             let dx = point.clientX - startX;
             let dy = point.clientY - startY;
             let minSize = window.innerWidth < 600 ? 40 : 20;
-            if (dir.includes('e')) {
-              element.style.width = `${Math.max(minSize, startWidth + dx)}px`;
-            } else if (dir.includes('w')) {
-              element.style.width = `${Math.max(minSize, startWidth - dx)}px`;
-              element.style.left = `${startLeft + dx}px`;
-            }
-            if (dir.includes('s')) {
-              element.style.height = `${Math.max(minSize, startHeight + dy)}px`;
-            } else if (dir.includes('n')) {
-              element.style.height = `${Math.max(minSize, startHeight - dy)}px`;
-              element.style.top = `${startTop + dy}px`;
+            if (isText) {
+              // For text, adjust font size instead of width/height
+              const fontSize = parseInt(element.style.fontSize, 10) || 24;
+              let newFontSize = fontSize + (dx + dy) / 2;
+              newFontSize = Math.max(12, Math.min(newFontSize, 100));
+              element.style.fontSize = `${newFontSize}px`;
+            } else {
+              if (dir.includes('e')) {
+                element.style.width = `${Math.max(minSize, startWidth + dx)}px`;
+              } else if (dir.includes('w')) {
+                element.style.width = `${Math.max(minSize, startWidth - dx)}px`;
+                element.style.left = `${startLeft + dx}px`;
+              }
+              if (dir.includes('s')) {
+                element.style.height = `${Math.max(minSize, startHeight + dy)}px`;
+              } else if (dir.includes('n')) {
+                element.style.height = `${Math.max(minSize, startHeight - dy)}px`;
+                element.style.top = `${startTop + dy}px`;
+              }
             }
           }
-          function pointerUp() { isResizing = false; }
+          function pointerUp() { 
+            isResizing = false; 
+            updateStateChecksum();
+          }
           handle.addEventListener('mousedown', pointerDown);
           handle.addEventListener('touchstart', pointerDown, { passive: false });
           document.addEventListener('mousemove', pointerMove);
@@ -684,12 +1311,48 @@ overlay.appendChild(img);
           let currentAngle = getAngle(centerX, centerY, point.clientX, point.clientY);
           let delta = currentAngle - startAngle;
           let newRotate = origRotate + delta;
-          element.style.transform = `rotate(${newRotate}deg)`;
           element.dataset.rotate = newRotate;
+          element.style.transform = `rotate(${newRotate}deg) scale(${element.dataset.flipH}, ${element.dataset.flipV}) perspective(1000px) rotateY(${element.dataset.bend}deg)`;
         }
-        function pointerUp() { isRotating = false; }
+        function pointerUp() { 
+          isRotating = false; 
+          updateStateChecksum();
+        }
         rotateHandle.addEventListener('mousedown', pointerDown);
         rotateHandle.addEventListener('touchstart', pointerDown, { passive: false });
+        document.addEventListener('mousemove', pointerMove);
+        document.addEventListener('touchmove', pointerMove, { passive: false });
+        document.addEventListener('mouseup', pointerUp);
+        document.addEventListener('touchend', pointerUp);
+      }
+
+      function makeBendable(element) {
+        const bendHandle = element.querySelector('.bend-handle');
+        let isBending = false, startX, startY, origBend;
+        function pointerDown(e) {
+          e.stopPropagation();
+          isBending = true;
+          const point = e.touches ? e.touches[0] : e;
+          startX = point.clientX;
+          startY = point.clientY;
+          origBend = parseFloat(element.dataset.bend) || 0;
+          e.preventDefault();
+        }
+        function pointerMove(e) {
+          if (!isBending) return;
+          const point = e.touches ? e.touches[0] : e;
+          let dx = point.clientX - startX;
+          let newBend = origBend + dx / 5;
+          newBend = Math.max(-90, Math.min(newBend, 90));
+          element.dataset.bend = newBend;
+          element.style.transform = `rotate(${element.dataset.rotate}deg) scale(${element.dataset.flipH}, ${element.dataset.flipV}) perspective(1000px) rotateY(${newBend}deg)`;
+        }
+        function pointerUp() { 
+          isBending = false; 
+          updateStateChecksum();
+        }
+        bendHandle.addEventListener('mousedown', pointerDown);
+        bendHandle.addEventListener('touchstart', pointerDown, { passive: false });
         document.addEventListener('mousemove', pointerMove);
         document.addEventListener('touchmove', pointerMove, { passive: false });
         document.addEventListener('mouseup', pointerUp);
@@ -712,78 +1375,167 @@ overlay.appendChild(img);
           createOverlay(null, true, {
             content,
             font: textFont.value,
-            size: textSize.value,
-            color: textColor.value
+            colors: selectedColors.length > 0 ? selectedColors : null,
+            color: selectedColors.length === 0 ? '#ffffff' : null
           });
         }
       });
 
       deleteBtn.addEventListener('click', () => {
         const selected = editorContainer.querySelector('.selected');
-        if (selected) selected.remove();
+        if (selected) {
+          const checksum = selected.dataset.checksum;
+          editorState.overlays = editorState.overlays.filter(ov => ov.checksum !== checksum);
+          selected.remove();
+          updateStateChecksum();
+        }
       });
 
-      saveBtn.addEventListener('click', () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = editorContainer.offsetWidth;
-        canvas.height = editorContainer.offsetHeight;
-        const ctx = canvas.getContext('2d');
-
-        // Draw base image if present
-        if (baseImage.src && baseImage.style.display !== 'none') {
-          ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
-        }
-
-        // Draw overlays in order, respecting rotation
+      // Validate all overlays are ready for rendering
+      function validateOverlaysReady() {
         const overlays = editorContainer.querySelectorAll('.overlay, .text-overlay');
-        Promise.all(
-          Array.from(overlays).map(ov => {
-            const left = parseInt(ov.style.left, 10);
-            const top = parseInt(ov.style.top, 10);
-            const width = ov.offsetWidth;
-            const height = ov.offsetHeight;
-            const rotate = parseFloat(ov.dataset.rotate || "0") * Math.PI / 180;
-            const cx = left + width / 2;
-            const cy = top + height / 2;
+        for (const overlay of overlays) {
+          if (overlay.classList.contains('overlay')) {
+            const img = overlay.querySelector('img');
+            if (!img.complete || img.naturalWidth === 0) {
+              return false;
+            }
+          }
+        }
+        return true;
+      }
+
+      // Get accurate position and dimensions for rendering
+      function getOverlayRenderData(overlay, scaleX, scaleY, offsetX, offsetY) {
+        const containerLeft = parseFloat(overlay.style.left) || 0;
+        const containerTop = parseFloat(overlay.style.top) || 0;
+        const imageLeft = containerLeft - offsetX;
+        const imageTop = containerTop - offsetY;
+        const left = imageLeft * scaleX;
+        const top = imageTop * scaleY;
+        const width = (parseFloat(overlay.style.width) || overlay.offsetWidth) * scaleX;
+        const height = (parseFloat(overlay.style.height) || overlay.offsetHeight) * scaleY;
+        
+        return {
+          left,
+          top,
+          width,
+          height,
+          rotate: parseFloat(overlay.dataset.rotate || "0") * Math.PI / 180,
+          flipH: parseInt(overlay.dataset.flipH || "1"),
+          flipV: parseInt(overlay.dataset.flipV || "1"),
+          bend: parseFloat(overlay.dataset.bend || "0") * Math.PI / 180
+        };
+      }
+
+      // Generate the final image with state validation
+      function generateFinalImage() {
+        return new Promise((resolve, reject) => {
+          loadingIndicator.style.display = 'block';
+          
+          if (!validateOverlaysReady()) {
+            loadingIndicator.style.display = 'none';
+            reject(new Error('Some overlays are still loading. Please wait and try again.'));
+            return;
+          }
+          
+          const canvas = document.createElement('canvas');
+          let naturalW = editorContainer.offsetWidth;
+          let naturalH = editorContainer.offsetHeight;
+          let displayedW = naturalW;
+          let displayedH = naturalH;
+          let offsetX = 0;
+          let offsetY = 0;
+          let scaleX = 1;
+          let scaleY = 1;
+
+          if (baseImage.src && baseImage.style.display !== 'none' && baseImage.complete && baseImage.naturalWidth > 0) {
+            naturalW = baseImage.naturalWidth;
+            naturalH = baseImage.naturalHeight;
+            const containerW = editorContainer.offsetWidth;
+            const containerH = editorContainer.offsetHeight;
+            const fitScale = Math.min(containerW / naturalW, containerH / naturalH);
+            displayedW = naturalW * fitScale;
+            displayedH = naturalH * fitScale;
+            offsetX = (containerW - displayedW) / 2;
+            offsetY = (containerH - displayedH) / 2;
+            scaleX = naturalW / displayedW;
+            scaleY = naturalH / displayedH;
+          }
+          
+          canvas.width = naturalW;
+          canvas.height = naturalH;
+          const ctx = canvas.getContext('2d');
+
+          if (baseImage.src && baseImage.style.display !== 'none') {
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
+          } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          }
+
+          const overlays = Array.from(editorContainer.querySelectorAll('.overlay, .text-overlay'));
+          
+          overlays.sort((a, b) => {
+            const zIndexA = parseInt(window.getComputedStyle(a).zIndex) || 1;
+            const zIndexB = parseInt(window.getComputedStyle(b).zIndex) || 1;
+            return zIndexA - zIndexB;
+          });
+
+          overlays.forEach(ov => {
+            const renderData = getOverlayRenderData(ov, scaleX, scaleY, offsetX, offsetY);
+            const cx = renderData.left + renderData.width / 2;
+            const cy = renderData.top + renderData.height / 2;
+            
             if (ov.classList.contains('text-overlay')) {
-              return new Promise(resolve => {
-                ctx.save();
-                ctx.translate(cx, cy);
-                ctx.rotate(rotate);
-                ctx.font = `${ov.style.fontSize} ${ov.style.fontFamily}`;
-                ctx.fillStyle = ov.style.color;
-                ctx.textBaseline = "top";
-                ctx.fillText(ov.innerText, -width / 2, -height / 2 + 10);
-                ctx.restore();
-                resolve();
-              });
+              ctx.save();
+              ctx.translate(cx, cy);
+              ctx.rotate(renderData.rotate);
+              // Apply bend effect using perspective
+              ctx.transform(1, 0, Math.tan(renderData.bend), 1, 0, 0);
+              const fontScale = (scaleX + scaleY) / 2;
+              const fontSize = parseInt(ov.style.fontSize, 10) * fontScale;
+              ctx.font = `${fontSize}px ${ov.style.fontFamily}`;
+              ctx.textBaseline = "middle";
+              ctx.textAlign = "center";
+              const textContentDiv = ov.querySelector('.text-content');
+              if (textContentDiv.children.length > 0) {
+                let xOffset = -ctx.measureText(textContentDiv.innerText).width / 2;
+                Array.from(textContentDiv.children).forEach(span => {
+                  ctx.fillStyle = span.style.color;
+                  ctx.fillText(span.innerText, xOffset, 0);
+                  xOffset += ctx.measureText(span.innerText).width;
+                });
+              } else {
+                ctx.fillStyle = textContentDiv.style.color;
+                ctx.fillText(textContentDiv.innerText, 0, 0);
+              }
+              ctx.restore();
             } else {
               const img = ov.querySelector('img');
-              return new Promise(resolve => {
-                function drawImg() {
-                  ctx.save();
-                  ctx.translate(cx, cy);
-                  ctx.rotate(rotate);
-                  ctx.drawImage(img, -width / 2, -height / 2, width, height);
-                  ctx.restore();
-                  resolve();
-                }
-                if (img.complete) drawImg();
-                else img.onload = drawImg;
-                img.onerror = () => resolve();
-              });
+              if (img.complete) {
+                ctx.save();
+                ctx.translate(cx, cy);
+                ctx.rotate(renderData.rotate);
+                ctx.scale(renderData.flipH, renderData.flipV);
+                ctx.transform(1, 0, Math.tan(renderData.bend), 1, 0, 0);
+                ctx.drawImage(img, -renderData.width / 2, -renderData.height / 2, renderData.width, renderData.height);
+                ctx.restore();
+              }
             }
-          })
-        ).then(() => {
-          // Draw watermark "bandana_sol" with colored letters
+          });
+
           const text = "bandana_sol";
           const colors = [
             "#ff6f61", "#ff8a80", "#fdd835", "#64b5f6", "#81c784", "#ba68c8", "#e57373",
             "#ff6f61", "#ff8a80", "#fdd835", "#64b5f6", "#81c784"
           ];
           ctx.save();
-          ctx.font = "bold 32px Orbitron, Arial, sans-serif";
-          let x = 20, y = canvas.height - 40;
+          const watermarkScale = (scaleX + scaleY) / 2;
+          const watermarkSize = 32 * watermarkScale;
+          ctx.font = `bold ${watermarkSize}px Orbitron, Arial, sans-serif`;
+          let x = 20 * scaleX, y = canvas.height - (40 * scaleY);
           for (let i = 0; i < text.length; i++) {
             ctx.fillStyle = colors[i % colors.length];
             ctx.fillText(text[i], x, y);
@@ -791,19 +1543,51 @@ overlay.appendChild(img);
           }
           ctx.restore();
 
-          // Download the image
-          const link = document.createElement('a');
-          link.download = 'bandana-profile.png';
-          link.href = canvas.toDataURL('image/png');
-          link.click();
-          alert('Your profile image has been downloaded!');
+          setTimeout(() => {
+            loadingIndicator.style.display = 'none';
+            resolve(canvas.toDataURL('image/png'));
+          }, 300);
+        });
+      }
+
+      previewBtn.addEventListener('click', () => {
+        generateFinalImage().then(dataUrl => {
+          previewImage.src = dataUrl;
+          previewModal.style.display = 'flex';
         }).catch(err => {
-          console.error('Error saving profile image:', err);
-          alert('Failed to save profile image. Please try again.');
+          alert(err.message);
         });
       });
 
-      // Copy contract address
+      closePreview.addEventListener('click', () => {
+        previewModal.style.display = 'none';
+      });
+
+      editAgain.addEventListener('click', () => {
+        previewModal.style.display = 'none';
+      });
+
+      confirmSave.addEventListener('click', () => {
+        const link = document.createElement('a');
+        link.download = 'bandana-profile.png';
+        link.href = previewImage.src;
+        link.click();
+        previewModal.style.display = 'none';
+        alert('Your profile image has been downloaded!');
+      });
+
+      saveBtn.addEventListener('click', () => {
+        generateFinalImage().then(dataUrl => {
+          const link = document.createElement('a');
+          link.download = 'bandana-profile.png';
+          link.href = dataUrl;
+          link.click();
+          alert('Your profile image has been downloaded!');
+        }).catch(err => {
+          alert(err.message);
+        });
+      });
+
       window.copyContract = function() {
         const addr = document.getElementById('contract-addr').innerText;
         navigator.clipboard.writeText(addr).then(() => {
